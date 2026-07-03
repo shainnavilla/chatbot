@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSUU SCO CommBot - Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f5fb;
+            color: #1a2d7c;
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background-color: #1a2d7c;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo svg {
+            width: 52px;
+            height: 52px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f5c300;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.5);
+            padding: 0 20px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background-color: #f5c300;
+            color: #0e1a5e;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+        }
+
+        .nav-badge {
+            background-color: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: auto;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #f5c300;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0e1a5e;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 220px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: white;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a2d7c;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .bot-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .bot-status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+            color: #1a2d7c;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #1a2d7c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .current-date {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 32px;
+            flex: 1;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        /* Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a2d7c;
+            margin-bottom: 8px;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .stat-change.up {
+            color: #22c55e;
+        }
+
+        .stat-change.down {
+            color: #ef4444;
+        }
+
+        .stat-badge {
+            background-color: #fef2f2;
+            color: #ef4444;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a2d7c;
+        }
+
+        /* Bar Chart */
+        .chart-container {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-bar {
+            width: 100%;
+            background-color: #1a2d7c;
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            height: 0;
+        }
+
+        .chart-bar:hover {
+            background-color: #f5c300;
+            box-shadow: 0 0 20px rgba(245, 195, 0, 0.4);
+        }
+
+        .chart-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .chart-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .chart-pill {
+            background-color: #f3f5fb;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #1a2d7c;
+        }
+
+        /* Recent Conversations */
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .conversation-item:last-child {
+            border-bottom: none;
+        }
+
+        .conv-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #1a2d7c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .conv-info {
+            flex: 1;
+        }
+
+        .conv-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #1a2d7c;
+        }
+
+        .conv-message {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .conv-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .status-badge.new {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.open {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .status-badge.closed {
+            background-color: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* Three Column Row */
+        .dashboard-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Top Topics */
+        .topic-item {
+            margin-bottom: 16px;
+        }
+
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .topic-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .topic-percent {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2d7c;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-fill.blue { background-color: #1a2d7c; }
+        .progress-fill.yellow { background-color: #f5c300; }
+        .progress-fill.green { background-color: #22c55e; }
+        .progress-fill.purple { background-color: #8b5cf6; }
+        .progress-fill.orange { background-color: #f97316; }
+        .progress-fill.red { background-color: #ef4444; }
+
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .quick-action-card {
+            background-color: #f3f5fb;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quick-action-card:hover {
+            background-color: #1a2d7c;
+            color: #f5c300;
+        }
+
+        .quick-action-card i {
+            font-size: 24px;
+        }
+
+        .quick-action-text {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* System Alerts */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .alert-item:last-child {
+            border-bottom: none;
+        }
+
+        .alert-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .alert-icon.red {
+            background-color: #fef2f2;
+            color: #ef4444;
+        }
+
+        .alert-icon.yellow {
+            background-color: #fefce8;
+            color: #eab308;
+        }
+
+        .alert-icon.green {
+            background-color: #f0fdf4;
+            color: #22c55e;
+        }
+
+        .alert-icon.blue {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .alert-text {
+            flex: 1;
+            font-size: 13px;
+            color: #1a2d7c;
+        }
+
+        /* Conversations View */
+        .filter-pills {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .filter-pill {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            color: #64748b;
+        }
+
+        .filter-pill:hover {
+            border-color: #1a2d7c;
+            color: #1a2d7c;
+        }
+
+        .filter-pill.active {
+            background-color: #1a2d7c;
+            color: white;
+            border-color: #1a2d7c;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748b;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .data-table td {
+            padding: 16px;
+            font-size: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-table tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .btn-view {
+            padding: 6px 16px;
+            background-color: #1a2d7c;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-view:hover {
+            background-color: #0e1a5e;
+        }
+
+        .role-pill {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .role-pill.student {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-pill.faculty {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .role-pill.media {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Alerts View */
+        .alerts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .alert-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .alert-row-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .alert-row-content {
+            flex: 1;
+        }
+
+        .alert-row-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a2d7c;
+        }
+
+        .alert-row-time {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        /* FAQ Manager */
+        .faq-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .btn-add {
+            padding: 10px 20px;
+            background-color: #1a2d7c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add:hover {
+            background-color: #0e1a5e;
+        }
+
+        .faq-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .faq-number {
+            width: 32px;
+            height: 32px;
+            background-color: #1a2d7c;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .faq-content {
+            flex: 1;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a2d7c;
+            margin-bottom: 6px;
+        }
+
+        .faq-answer {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .faq-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #e2e8f0;
+            background-color: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+
+        .btn-icon:hover {
+            border-color: #1a2d7c;
+            color: #1a2d7c;
+        }
+
+        .btn-icon.delete:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 16px;
+            padding: 32px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom:  the 24px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a2d7c;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #e2e8f0;
+            color: #1a2d7c;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a2d7c;
+            margin-bottom: 8px;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #1a2d7c;
+            box-shadow: 0 0 0 3px rgba(26, 45, 124, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .btn-cancel {
+            padding: 10px 20px;
+            background-color: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f1f5f9;
+            color: #1a2d7c;
+        }
+
+        .btn-save {
+            padding: 10px 20px;
+            background-color: #1a2d7c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background-color: #0e1a5e;
+        }
+
+        /* Topic Analytics */
+        .analytics-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .unanswered-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .warning-badge {
+            background-color: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .warning-badge.orange {
+            background-color: #f97316;
+        }
+
+        .unanswered-text {
+            flex: 1;
+            font-size: 14px;
+            color: #1a2d7c;
+        }
+
+        .unanswered-count {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ef4444;
+        }
+
+        /* Settings */
+        .settings-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .status-label {
+            font-weight: 500;
+            font-size: 14px;
+            color: #1a2d7c;
+        }
+
+        .status-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #166534;
+        }
+
+        .info-box {
+            background-color: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .info-box-text {
+            font-size: 14px;
+            color: #854d0e;
+        }
+
+        .info-box-highlight {
+            font-weight: 700;
+            color: #a16207;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg viewBox="0 0 52 52">
+                        <rect x="4" y="4" width="40" height="32" rx="8" fill="#1a2d7c"/>
+                        <polygon points="10,36 10,46 20,36" fill="#1a2d7c"/>
+                        <circle cx="17" cy="18" r="3.5" fill="#f5c300"/>
+                        <circle cx="31" cy="18" r="3.5" fill="#f5c300"/>
+                        <circle cx="18.2" cy="16.8" r="1" fill="white"/>
+                        <circle cx="32.2" cy="16.8" r="1" fill="white"/>
+                        <path d="M15 25 Q24 31 33 25" stroke="#f5c300" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+                    </svg>
+                    <span class="logo-text">CommBot</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a class="nav-item active" data-view="dashboard">
+                        <i class="ti ti-layout-dashboard"></i>
+                        Dashboard
+                    </a>
+                    <a class="nav-item" data-view="conversations">
+                        <i class="ti ti-messages"></i>
+                        Conversations
+                    </a>
+                    <a class="nav-item" data-view="alerts">
+                        <i class="ti ti-bell"></i>
+                        Alerts
+                        <span class="nav-badge">3</span>
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">Manage</div>
+                    <a class="nav-item" data-view="faq">
+                        <i class="ti ti-help-circle"></i>
+                        FAQ Manager
+                    </a>
+                    <a class="nav-item" data-view="users">
+                        <i class="ti ti-users"></i>
+                        Users
+                    </a>
+                    <a class="nav-item" data-view="analytics">
+                        <i class="ti ti-chart-bar"></i>
+                        Topic Analytics
+                    </a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-section-title">System</div>
+                    <a class="nav-item" data-view="settings">
+                        <i class="ti ti-settings"></i>
+                        Settings
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">SA</div>
+                    <div class="user-details">
+                        <div class="user-name">SCO Admin</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                <div class="top-bar-right">
+                    <span class="current-date" id="currentDate"></span>
+                    <div class="bot-status">
+                        <span class="bot-status-dot"></span>
+                        Bot Online
+                    </div>
+                    <div class="notification-bell">
+                        <i class="ti ti-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="admin-avatar">SA</div>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard View -->
+                <div class="view active" id="dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Conversations</div>
+                            <div class="stat-value">1,284</div>
+                            <div class="stat-change up">+12% <i class="ti ti-arrow-up"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Active Users Today</div>
+                            <div class="stat-value">342</div>
+                            <div class="stat-change up">+8% <i class="ti ti-arrow-up"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Resolution Rate</div>
+                            <div class="stat-value">94.2%</div>
+                            <div class="stat-change up">+3% <i class="ti ti-arrow-up"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Avg. Response Time</div>
+                            <div class="stat-value">1.3s</div>
+                            <div class="stat-change down">
+                                -5% <i class="ti ti-arrow-down"></i>
+                                <span class="stat-badge">Slow</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row">
+                        <div class="card">
+                            <h3 class="card-title">Weekly Activity</h3>
+                            <div class="chart-container">
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="287"></div>
+                                    <span class="chart-label">Mon</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="210"></div>
+                                    <span class="chart-label">Tue</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="245"></div>
+                                    <span class="chart-label">Wed</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="198"></div>
+                                    <span class="chart-label">Thu</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="176"></div>
+                                    <span class="chart-label">Fri</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="94"></div>
+                                    <span class="chart-label">Sat</span>
+                                </div>
+                                <div class="chart-bar-wrapper">
+                                    <div class="chart-bar" data-value="74"></div>
+                                    <span class="chart-label">Sun</span>
+                                </div>
+                            </div>
+                            <div class="chart-pills">
+                                <span class="chart-pill">Mon peak 287</span>
+                                <span class="chart-pill">Week total 1284</span>
+                                <span class="chart-pill">Resolved 94.2%</span>
+                                <span class="chart-pill">Escalated 47</span>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Recent Conversations</h3>
+                            <div class="conversation-item">
+                                <div class="conv-avatar">JC</div>
+                                <div class="conv-info">
+                                    <div class="conv-name">Juan dela Cruz</div>
+                                    <div class="conv-message">How do I enroll for the upcoming semester?</div>
+                                </div>
+                                <span class="conv-time">2m ago</span>
+                                <span class="status-badge new">New</span>
+                            </div>
+                            <div class="conversation-item">
+                                <div class="conv-avatar">MR</div>
+                                <div class="conv-info">
+                                    <div class="conv-name">Maria Reyes</div>
+                                    <div class="conv-message">What are the requirements for ACET?</div>
+                                </div>
+                                <span class="conv-time">15m ago</span>
+                                <span class="status-badge open">Open</span>
+                            </div>
+                            <div class="conversation-item">
+                                <div class="conv-avatar">AC</div>
+                                <div class="conv-info">
+                                    <div class="conv-name">Ana Cruz</div>
+                                    <div class="conv-message">Thank you for the help!</div>
+                                </div>
+                                <span class="conv-time">1h ago</span>
+                                <span class="status-badge closed">Closed</span>
+                            </div>
+                            <div class="conversation-item">
+                                <div class="conv-avatar">RL</div>
+                                <div class="conv-info">
+                                    <div class="conv-name">Ramon Lim</div>
+                                    <div class="conv-message">Where can I find the scholarship form?</div>
+                                </div>
+                                <span class="conv-time">2h ago</span>
+                                <span class="status-badge open">Open</span>
+                            </div>
+                            <div class="conversation-item">
+                                <div class="conv-avatar">CB</div>
+                                <div class="conv-info">
+                                    <div class="conv-name">Carla Bautista</div>
+                                    <div class="conv-message">Is the library open on weekends?</div>
+                                </div>
+                                <span class="conv-time">3h ago</span>
+                                <span class="status-badge closed">Closed</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-row-3">
+                        <div class="card">
+                            <h3 class="card-title">Top Topics</h3>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Enrollment</span>
+                                    <span class="topic-percent">82%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill blue" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">ACET</span>
+                                    <span class="topic-percent">65%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill yellow" style="width: 65%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Programs</span>
+                                    <span class="topic-percent">54%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill green" style="width: 54%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Policies</span>
+                                    <span class="topic-percent">38%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill purple" style="width: 38%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Media</span>
+                                    <span class="topic-percent">22%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill orange" style="width: 22%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Quick Actions</h3>
+                            <div class="quick-actions-grid">
+                                <div class="quick-action-card">
+                                    <i class="ti ti-plus"></i>
+                                    <span class="quick-action-text">Add FAQ</span>
+                                </div>
+                                <div class="quick-action-card">
+                                    <i class="ti ti-message"></i>
+                                    <span class="quick-action-text">View Chats</span>
+                                </div>
+                                <div class="quick-action-card">
+                                    <i class="ti ti-user-plus"></i>
+                                    <span class="quick-action-text">Add User</span>
+                                </div>
+                                <div class="quick-action-card">
+                                    <i class="ti ti-robot"></i>
+                                    <span class="quick-action-text">Bot Settings</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">System Alerts</h3>
+                            <div class="alert-item">
+                                <div class="alert-icon red">
+                                    <i class="ti ti-alert-triangle"></i>
+                                </div>
+                                <span class="alert-text">3 unanswered queries</span>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon yellow">
+                                    <i class="ti ti-info-circle"></i>
+                                </div>
+                                <span class="alert-text">New media inquiry</span>
+                            </div>
+                            <div class="alert-item">
+                                <div class="alert-icon green">
+                                    <i class="ti ti-check-circle"></i>
+                                </div>
+                                <span class="alert-text">Bot running normally</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conversations View -->
+                <div class="view" id="conversations">
+                    <div class="filter-pills">
+                        <span class="filter-pill active">All</span>
+                        <span class="filter-pill">Open</span>
+                        <span class="filter-pill">Closed</span>
+                    </div>
+                    <div class="card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Last Message</th>
+                                    <th>Topic</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Juan dela Cruz</td>
+                                    <td>How do I enroll for the upcoming semester?</td>
+                                    <td>Enrollment</td>
+                                    <td><span class="status-badge new">New</span></td>
+                                    <td>2m ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Reyes</td>
+                                    <td>What are the requirements for ACET?</td>
+                                    <td>ACET</td>
+                                    <td><span class="status-badge open">Open</span></td>
+                                    <td>15m ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Ana Cruz</td>
+                                    <td>Thank you for the help!</td>
+                                    <td>General</td>
+                                    <td><span class="status-badge closed">Closed</span></td>
+                                    <td>1h ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Ramon Lim</td>
+                                    <td>Where can I find the scholarship form?</td>
+                                    <td>Policies</td>
+                                    <td><span class="status-badge open">Open</span></td>
+                                    <td>2h ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Carla Bautista</td>
+                                    <td>Is the library open on weekends?</td>
+                                    <td>Programs</td>
+                                    <td><span class="status-badge closed">Closed</span></td>
+                                    <td>3h ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                                <tr>
+                                    <td>Mark Santos (Philippine Daily Inquirer)</td>
+                                    <td>Request for interview about SCO programs</td>
+                                    <td>Media/Press</td>
+                                    <td><span class="status-badge new">New</span></td>
+                                    <td>4h ago</td>
+                                    <td><button class="btn-view">View</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Alerts View -->
+                <div class="view" id="alerts">
+                    <div class="alerts-list">
+                        <div class="alert-row">
+                            <div class="alert-row-icon red">
+                                <i class="ti ti-alert-triangle"></i>
+                            </div>
+                            <div class="alert-row-content">
+                                <div class="alert-row-title">3 unanswered queries detected</div>
+                                <div class="alert-row-time">5 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-row">
+                            <div class="alert-row-icon yellow">
+                                <i class="ti ti-info-circle"></i>
+                            </div>
+                            <div class="alert-row-content">
+                                <div class="alert-row-title">New media inquiry from external press</div>
+                                <div class="alert-row-time">15 minutes ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-row">
+                            <div class="alert-row-icon blue">
+                                <i class="ti ti-trending-up"></i>
+                            </div>
+                            <div class="alert-row-content">
+                                <div class="alert-row-title">Conversation spike detected - 40% above average</div>
+                                <div class="alert-row-time">1 hour ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-row">
+                            <div class="alert-row-icon green">
+                                <i class="ti ti-check-circle"></i>
+                            </div>
+                            <div class="alert-row-content">
+                                <div class="alert-row-title">Resolution rate hit 94.2% - new record!</div>
+                                <div class="alert-row-time">2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="alert-row">
+                            <div class="alert-row-icon green">
+                                <i class="ti ti-refresh"></i>
+                            </div>
+                            <div class="alert-row-content">
+                                <div class="alert-row-title">Bot successfully restarted after scheduled maintenance</div>
+                                <div class="alert-row-time">3 hours ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ Manager View -->
+                <div class="view" id="faq">
+                    <div class="faq-header">
+                        <h3 class="card-title" style="margin: 0;">FAQ Manager</h3>
+                        <button class="btn-add" id="addFaqBtn">
+                            <i class="ti ti-plus"></i>
+                            Add New FAQ
+                        </button>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-number">1</div>
+                        <div class="faq-content">
+                            <div class="faq-question">How do I enroll for the upcoming semester?</div>
+                            <div class="faq-answer">Visit the registrar's office or apply online through the student portal...</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-icon"><i class="ti ti-pencil"></i></button>
+                            <button class="btn-icon delete"><i class="ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-number">2</div>
+                        <div class="faq-content">
+                            <div class="faq-question">What are the requirements for ACET?</div>
+                            <div class="faq-answer">You need a completed application form, high school transcripts...</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-icon"><i class="ti ti-pencil"></i></button>
+                            <button class="btn-icon delete"><i class="ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-number">3</div>
+                        <div class="faq-content">
+                            <div class="faq-question">What programs does FSUU offer?</div>
+                            <div class="faq-answer">We offer undergraduate programs in Business, Education, Engineering...</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-icon"><i class="ti ti-pencil"></i></button>
+                            <button class="btn-icon delete"><i class="ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-number">4</div>
+                        <div class="faq-content">
+                            <div class="faq-question">What is the tuition fee structure?</div>
+                            <div class="faq-answer">Tuition fees vary by program and number of units. Please contact the finance office...</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-icon"><i class="ti ti-pencil"></i></button>
+                            <button class="btn-icon delete"><i class="ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-number">5</div>
+                        <div class="faq-content">
+                            <div class="faq-question">How can I contact the SCO office?</div>
+                            <div class="faq-answer">You can visit us at the Student Center, call us at (085) 123-4567...</div>
+                        </div>
+                        <div class="faq-actions">
+                            <button class="btn-icon"><i class="ti ti-pencil"></i></button>
+                            <button class="btn-icon delete"><i class="ti ti-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users View -->
+                <div class="view" id="users">
+                    <div class="faq-header">
+                        <h3 class="card-title" style="margin: 0;">User Management</h3>
+                        <button class="btn-add">
+                            <i class="ti ti-user-plus"></i>
+                            Add User
+                        </button>
+                    </div>
+                    <div class="card">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Conversations</th>
+                                    <th>Last Active</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Juan dela Cruz</td>
+                                    <td>juan.cruz@fsuu.edu.ph</td>
+                                    <td><span class="role-pill student">Student</span></td>
+                                    <td>24</td>
+                                    <td>2 hours ago</td>
+                                    <td><span class="status-badge open">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Reyes</td>
+                                    <td>maria.reyes@fsuu.edu.ph</td>
+                                    <td><span class="role-pill faculty">Faculty</span></td>
+                                    <td>12</td>
+                                    <td>1 day ago</td>
+                                    <td><span class="status-badge open">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ana Cruz</td>
+                                    <td>ana.cruz@fsuu.edu.ph</td>
+                                    <td><span class="role-pill student">Student</span></td>
+                                    <td>8</td>
+                                    <td>3 days ago</td>
+                                    <td><span class="status-badge closed">Inactive</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ramon Lim</td>
+                                    <td>ramon.lim@fsuu.edu.ph</td>
+                                    <td><span class="role-pill student">Student</span></td>
+                                    <td>31</td>
+                                    <td>5 hours ago</td>
+                                    <td><span class="status-badge open">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Mark Santos</td>
+                                    <td>mark.santos@pdi.com.ph</td>
+                                    <td><span class="role-pill media">Media</span></td>
+                                    <td>3</td>
+                                    <td>1 week ago</td>
+                                    <td><span class="status-badge open">Active</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Topic Analytics View -->
+                <div class="view" id="analytics">
+                    <div class="analytics-row">
+                        <div class="card">
+                            <h3 class="card-title">Topic Breakdown</h3>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Enrollment</span>
+                                    <span class="topic-percent">82%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill blue" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">ACET/Exam</span>
+                                    <span class="topic-percent">65%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill yellow" style="width: 65%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Programs</span>
+                                    <span class="topic-percent">54%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill green" style="width: 54%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Policies</span>
+                                    <span class="topic-percent">38%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill purple" style="width: 38%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Media/SCO</span>
+                                    <span class="topic-percent">28%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill orange" style="width: 28%"></div>
+                                </div>
+                            </div>
+                            <div class="topic-item">
+                                <div class="topic-header">
+                                    <span class="topic-name">Announcements</span>
+                                    <span class="topic-percent">15%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill red" style="width: 15%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Unanswered & Escalated</h3>
+                            <div class="unanswered-item">
+                                <span class="warning-badge">Escalated</span>
+                                <span class="unanswered-text">"What is the deadline for scholarship application?"</span>
+                                <span class="unanswered-count">23x</span>
+                            </div>
+                            <div class="unanswered-item">
+                                <span class="warning-badge orange">Unanswered</span>
+                                <span class="unanswered-text">"How do I appeal a grade?"</span>
+                                <span class="unanswered-count">15x</span>
+                            </div>
+                            <div class="unanswered-item">
+                                <span class="warning-badge orange">Unanswered</span>
+                                <span class="unanswered-text">"What are the internship requirements?"</span>
+                                <span class="unanswered-count">12x</span>
+                            </div>
+                            <div class="unanswered-item">
+                                <span class="warning-badge orange">Unanswered</span>
+                                <span class="unanswered-text">"Can I transfer credits from another school?"</span>
+                                <span class="unanswered-count">8x</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div class="view" id="settings">
+                    <div class="settings-row">
+                        <div class="card">
+                            <h3 class="card-title">Bot Configuration</h3>
+                            <div class="form-group">
+                                <label class="form-label">Bot Display Name</label>
+                                <input type="text" class="form-input" value="FSUU CommBot">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">SCO Email Address</label>
+                                <input type="email" class="form-input" value="sco@fsuu.edu.ph">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Welcome Message</label>
+                                <textarea class="form-textarea">Hello! I'm the FSUU SCO CommBot. How can I help you today?</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Response Language</label>
+                                <select class="form-select">
+                                    <option>English</option>
+                                    <option>Cebuano</option>
+                                    <option>Tagalog</option>
+                                </select>
+                            </div>
+                            <button class="btn-save">Save Configuration</button>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">System Status</h3>
+                            <div class="status-item">
+                                <span class="status-label">CommBot AI</span>
+                                <span class="status-value">Online</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Knowledge Base</span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Email Alerts</span>
+                                <span class="status-value">Active</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">API Connection</span>
+                                <span class="status-value">Healthy</span>
+                            </div>
+                            <div class="info-box">
+                                <span class="info-box-text">System Uptime: <span class="info-box-highlight">99.8%</span> over the last 30 days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div class="modal-overlay" id="faqModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add / Edit FAQ</h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Question</label>
+                <input type="text" class="form-input" placeholder="Enter the question">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Answer</label>
+                <textarea class="form-textarea" placeholder="Enter the answer"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Topic Tag</label>
+                <select class="form-select">
+                    <option>Enrollment</option>
+                    <option>ACET/Exam</option>
+                    <option>Programs</option>
+                    <option>Policies</option>
+                    <option>Media/SCO</option>
+                    <option>Announcements</option>
+                    <option>General</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="modalCancel">Cancel</button>
+                <button class="btn-save" id="modalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const views = document.querySelectorAll('.view');
+        const pageTitle = document.getElementById('pageTitle');
+
+        const viewTitles = {
+            'dashboard': 'Dashboard',
+            'conversations': 'Conversations',
+            'alerts': 'Alerts',
+            'faq': 'FAQ Manager',
+            'users': 'Users',
+            'analytics': 'Topic Analytics',
+            'settings': 'Settings'
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const viewId = item.getAttribute('data-view');
+                
+                // Update nav active state
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Update view visibility
+                views.forEach(view => view.classList.remove('active'));
+                document.getElementById(viewId).classList.add('active');
+                
+                // Update page title
+                pageTitle.textContent = viewTitles[viewId];
+            });
+        });
+
+        // Current Date
+        const currentDate = document.getElementById('currentDate');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        currentDate.textContent = new Date().toLocaleDateString('en-US', options);
+
+        // Bar Chart Animation
+        const chartBars = document.querySelectorAll('.chart-bar');
+        const maxValue = 287;
+
+        chartBars.forEach(bar => {
+            const value = parseInt(bar.getAttribute('data-value'));
+            const height = (value / maxValue) * 100;
+            setTimeout(() => {
+                bar.style.height = height + '%';
+            }, 100);
+        });
+
+        // FAQ Modal
+        const modal = document.getElementById('faqModal');
+        const addFaqBtn = document.getElementById('addFaqBtn');
+        const modalClose = document.getElementById('modalClose');
+        const modalCancel = document.getElementById('modalCancel');
+        const modalSave = document.getElementById('modalSave');
+
+        addFaqBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modalCancel.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+        modalSave.addEventListener('click', () => {
+            alert('FAQ saved!');
+            modal.classList.remove('active');
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+
+        // Filter Pills
+        const filterPills = document.querySelectorAll('.filter-pill');
+        filterPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                filterPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
