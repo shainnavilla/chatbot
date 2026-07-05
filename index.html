@@ -151,6 +151,51 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: all 0.6s ease; }
     .reveal.active { opacity: 1; transform: translateY(0); }
     
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 6px;
+      padding: 8px;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: #0B2F5D;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(8px, 8px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+    
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: #fff;
+      flex-direction: column;
+      padding: 16px;
+      gap: 12px;
+      z-index: 999;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu a {
+      padding: 12px 16px;
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    #mobile-menu a:hover { background: #f0f2f5; color: #0B2F5D; }
+    
     /* Mobile Responsive */
     @media (max-width: 1024px) {
       .hero { flex-direction: column; text-align: center; padding-top: 100px; }
@@ -162,16 +207,82 @@
       .features-grid { grid-template-columns: repeat(2, 1fr); }
       .topics-grid { grid-template-columns: repeat(2, 1fr); }
     }
+    
     @media (max-width: 768px) {
+      .navbar { padding: 16px 16px; }
       .nav-links { display: none; }
-      .hero h1 { font-size: 32px; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: 1fr; }
-      .topics-grid { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: repeat(2, 1fr); }
-      .stats-band { flex-direction: column; gap: 32px; }
+      .hamburger { display: flex; }
+      #mobile-menu { top: 60px; }
+      .hero { padding: 80px 16px 60px; gap: 32px; }
+      .hero h1 { font-size: clamp(28px, 6vw, 48px); line-height: 1.2; }
+      .hero p { max-width: 100%; font-size: 16px; }
+      .hero-buttons { flex-direction: column; }
+      .hero-buttons a { width: 100%; text-align: center; }
+      .stat-pills { flex-direction: column; gap: 12px; }
+      .stat-pill { width: 100%; }
+      .section { padding: 60px 16px; }
+      .section-title { font-size: 28px; }
+      .section-subtitle { font-size: 14px; }
+      .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+      .step-card { padding: 24px 16px; }
+      .features-grid { grid-template-columns: 1fr; gap: 16px; }
+      .topics-grid { grid-template-columns: 1fr; gap: 16px; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .footer-column a { font-size: 13px; }
+      .stats-band { padding: 40px 16px; gap: 24px; }
+      .stat-number { font-size: 36px; }
+      .stat-label { font-size: 12px; }
+      .cta-section { padding: 60px 16px; }
+      .cta-content h2 { font-size: 28px; }
+      .cta-content p { font-size: 14px; }
       .cta-buttons { flex-direction: column; }
-      .footer-bottom { flex-direction: column; gap: 12px; }
+      .cta-buttons a { width: 100%; text-align: center; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+    
+    @media (max-width: 480px) {
+      .navbar { padding: 12px 12px; }
+      .logo-text { font-size: 16px; }
+      .cta-btn { padding: 10px 16px; font-size: 13px; }
+      .hero { padding: 70px 12px 50px; }
+      .hero h1 { font-size: clamp(24px, 5vw, 32px); }
+      .hero p { font-size: 14px; }
+      .stat-pills { gap: 8px; }
+      .stat-pill { font-size: 11px; padding: 8px 12px; }
+      .section { padding: 40px 12px; }
+      .section-title { font-size: 24px; margin-bottom: 12px; }
+      .section-subtitle { font-size: 13px; margin-bottom: 32px; }
+      .steps-grid { gap: 12px; }
+      .step-card { padding: 20px 12px; }
+      .step-number { width: 40px; height: 40px; font-size: 16px; }
+      .step-card h3 { font-size: 14px; }
+      .step-card p { font-size: 12px; }
+      .features-grid { gap: 12px; }
+      .feature-card { padding: 20px 12px; gap: 12px; }
+      .feature-icon { width: 52px; height: 52px; }
+      .feature-icon i { font-size: 24px; }
+      .feature-card h3 { font-size: 14px; }
+      .feature-card p { font-size: 12px; }
+      .topics-grid { gap: 12px; }
+      .topic-card { padding: 16px; gap: 12px; }
+      .topic-icon { width: 40px; height: 40px; }
+      .topic-icon i { font-size: 20px; }
+      .topic-content h3 { font-size: 14px; }
+      .topic-content p { font-size: 11px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+      .footer-brand h3 { font-size: 16px; }
+      .footer-brand p { font-size: 12px; }
+      .footer-column h4 { font-size: 14px; }
+      .footer-column a { font-size: 12px; }
+      .stats-band { padding: 30px 12px; gap: 20px; }
+      .stat-item { }
+      .stat-number { font-size: 28px; }
+      .stat-label { font-size: 11px; }
+      .cta-section { padding: 50px 12px; }
+      .cta-content h2 { font-size: 22px; margin-bottom: 12px; }
+      .cta-content p { font-size: 13px; margin-bottom: 20px; }
+      .cta-watermark { font-size: 60px; }
+      .footer-bottom { font-size: 11px; }
     }
   </style>
 </head>
@@ -189,8 +300,22 @@
       <a href="https://urios.edu.ph" target="_blank">FSUU Website</a>
       <a href="admin.html">Admin Panel</a>
     </div>
-    <a href="fsuu_sco_chatbot.html" class="cta-btn">Open UniAssist</a>
+    <button class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <a href="fsuu_sco_chatbot.html?autologin=true" class="cta-btn">Open UniAssist</a>
   </nav>
+  
+  <div id="mobile-menu">
+    <a href="#how-it-works">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#topics">Topics</a>
+    <a href="https://urios.edu.ph" target="_blank">FSUU Website</a>
+    <a href="admin.html">Admin Panel</a>
+    <a href="fsuu_sco_chatbot.html?autologin=true" style="background: #0B2F5D; color: #c8a94a; text-align: center;">Open UniAssist</a>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -198,7 +323,7 @@
       <h1>Your questions, answered instantly.</h1>
       <p>The official AI assistant of the Strategic Communication Office of Father Saturnino Urios University. Get instant answers about enrollment, programs, and more.</p>
       <div class="hero-buttons">
-        <a href="fsuu_sco_chatbot.html" class="primary-btn">Open App</a>
+        <a href="fsuu_sco_chatbot.html?autologin=true" class="primary-btn">Open App</a>
         <a href="https://urios.edu.ph" target="_blank" class="secondary-btn">Visit Website</a>
       </div>
       <div class="stat-pills">
@@ -363,7 +488,7 @@
       <h2>Talk to UniAssist now</h2>
       <p>Get instant answers to your FSUU-related questions</p>
       <div class="cta-buttons">
-        <a href="fsuu_sco_chatbot.html" class="primary-btn">Open App</a>
+        <a href="fsuu_sco_chatbot.html?autologin=true" class="primary-btn">Open App</a>
         <a href="https://urios.edu.ph" target="_blank" class="secondary-btn">Visit Website</a>
       </div>
     </div>
@@ -381,7 +506,7 @@
         <a href="#how-it-works">How It Works</a>
         <a href="#features">Features</a>
         <a href="#topics">Topics</a>
-        <a href="fsuu_sco_chatbot.html">Open UniAssist</a>
+        <a href="fsuu_sco_chatbot.html?autologin=true">Open UniAssist</a>
       </div>
       <div class="footer-column">
         <h4>SCO Links</h4>
@@ -404,6 +529,21 @@
   </footer>
 
   <script>
+    // Hamburger Menu Toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('open');
+    });
+    // Close menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('open');
+      });
+    });
+    
     // Navbar scroll effect
     window.addEventListener('scroll', () => {
       const navbar = document.getElementById('navbar');

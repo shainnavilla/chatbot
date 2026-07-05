@@ -410,6 +410,45 @@
     .conv-item:hover {
       background: #f9f9f9;
     }
+    
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      body {
+        background: #f0f2f5;
+        padding: 0;
+        align-items: flex-start;
+      }
+      #phone {
+        width: 100vw;
+        height: 100dvh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        margin: 0;
+      }
+      .inp {
+        font-size: 16px;
+      }
+      .inp::placeholder {
+        font-size: 16px;
+      }
+    }
+    
+    @media (min-width: 601px) and (max-width: 900px) {
+      #phone {
+        width: 420px;
+        height: 90vh;
+        border-radius: 28px;
+      }
+    }
+    
+    @media (min-width: 901px) {
+      #phone {
+        width: 365px;
+        height: 730px;
+        border-radius: 38px;
+      }
+    }
   </style>
 </head>
 
@@ -436,15 +475,13 @@
         <button class="btn-main" style="background:#fff;color:#0B2F5D;margin-top:16px;"
           onclick="showScreen('signin-screen')">Sign In</button>
         <button class="btn-ghost" style="margin-top:12px;" onclick="startChattingAsGuest()">Continue as Guest</button>
-        <p style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:16px;"><a href="admin.html"
-            style="color:#c8a94a;text-decoration:none;">Staff/Admin Access</a></p>
       </div>
     </div>
 
     <!-- SIGN IN -->
     <div class="screen gone" id="signin-screen" style="background:#fff;">
       <div style="background:#0B2F5D;padding:20px 18px 16px;flex-shrink:0;">
-        <button onclick="showScreen('splash-screen')"
+        <button onclick="window.location.href='index.html'"
           style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:18px;margin-bottom:10px;display:flex;align-items:center;padding:0;">
           <i class="ti ti-arrow-left"></i>
         </button>
@@ -490,17 +527,16 @@
           <span class="link-txt" onclick="showScreen('forgot-screen')">Forgot password?</span>
         </div>
         <button class="btn-main" onclick="doSignIn()">Sign in</button>
-        <p style="font-size:12px;color:#888;text-align:center;">Don't have an account? <span class="link-txt"
+        <button class="btn-ghost" style="margin-top:14px;border:2px solid #0B2F5D;background:#f8f9fa;color:#0B2F5D;font-weight:600;font-size:14px;padding:12px;border-radius:8px;" onclick="startChattingAsGuest()">Continue as Guest</button>
+        <p style="font-size:12px;color:#888;text-align:center;margin-top:14px;">Don't have an account? <span class="link-txt"
             onclick="showScreen('signup-screen')">Create one</span></p>
-        <p style="font-size:11px;color:#888;text-align:center;margin-top:8px;"><a href="admin.html"
-            style="color:#0B2F5D;text-decoration:none;font-weight:500;">Staff/Admin Login</a></p>
       </div>
     </div>
 
     <!-- SIGN UP -->
     <div class="screen gone" id="signup-screen" style="background:#fff;">
       <div style="background:#0B2F5D;padding:20px 18px 16px;flex-shrink:0;">
-        <button onclick="showScreen('splash-screen')"
+        <button onclick="showScreen('signin-screen')"
           style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:18px;margin-bottom:10px;display:flex;align-items:center;padding:0;">
           <i class="ti ti-arrow-left"></i>
         </button>
@@ -801,11 +837,22 @@
   </div>
 
   <script>
+    // Auto-login check - skip splash screen when autologin parameter is true
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoLoginMode = urlParams.get('autologin') === 'true';
+
     let currentUser = { name: '', email: '', initials: '', role: '' };
     let chatHistory = [];
     let busy = false;
 
     const SYSTEM = `You are the official AI assistant for the Strategic Communication Office (SCO) of Father Saturnino Urios University (FSUU) in Butuan City, Philippines. Handle SCO topics (announcements, press releases, media inquiries, branding, events) and general FSUU info (admissions, departments, contacts, campus life). Be professional, warm, and concise — under 3 sentences when possible. Key info: SCO email sco@urios.edu.ph, website urios.edu.ph, Facebook facebook.com/FSUUofficial, event coverage needs 5 days lead time, unauthorized use of FSUU seal is prohibited.`;
+
+    // Skip splash screen if autologin is enabled
+    if (autoLoginMode) {
+      window.addEventListener('DOMContentLoaded', () => {
+        showScreen('signin-screen');
+      });
+    }
 
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => {
@@ -912,7 +959,7 @@
     function doSignOut() {
       currentUser = { name: '', email: '', initials: '', role: '' };
       chatHistory = [];
-      showScreen('splash-screen');
+      showScreen('signin-screen');
     }
     const welcomes = {
       '': 'Good day! I\'m the UniAssist AI. Ask me anything about enrollment, programs, student policies, media inquiries, or announcements.',
