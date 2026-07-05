@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FSUU SCO CommBot - Admin Panel</title>
+    <title>UniAssist - Admin Panel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,8 +17,8 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f5fb;
-            color: #1a2d7c;
+            background-color: #e8eaf0;
+            color: #0B2F5D;
             min-height: 100vh;
         }
 
@@ -30,7 +30,7 @@
         /* Sidebar */
         .sidebar {
             width: 220px;
-            background-color: #1a2d7c;
+            background-color: #0B2F5D;
             color: white;
             display: flex;
             flex-direction: column;
@@ -51,15 +51,16 @@
             gap: 12px;
         }
 
-        .logo svg {
+        .logo img {
             width: 52px;
             height: 52px;
+            object-fit: contain;
         }
 
         .logo-text {
             font-size: 18px;
             font-weight: 700;
-            color: #f5c300;
+            color: #c8a94a;
         }
 
         .sidebar-nav {
@@ -99,8 +100,8 @@
         }
 
         .nav-item.active {
-            background-color: #f5c300;
-            color: #0e1a5e;
+            background-color: #c8a94a;
+            color: #prompt make my system web based and mobile responsive;
         }
 
         .nav-item i {
@@ -131,13 +132,13 @@
         .user-avatar {
             width: 40px;
             height: 40px;
-            background-color: #f5c300;
+            background-color: #c8a94a;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: #0e1a5e;
+            color: #0B2F5D;
         }
 
         .user-details {
@@ -175,7 +176,7 @@
         .page-title {
             font-size: 24px;
             font-weight: 700;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .top-bar-right {
@@ -213,7 +214,7 @@
             position: relative;
             cursor: pointer;
             font-size: 24px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .notification-badge {
@@ -235,12 +236,12 @@
         .admin-avatar {
             width: 40px;
             height: 40px;
-            background-color: #1a2d7c;
+            background-color: #0B2F5D;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #c8a94a;
             font-weight: 600;
             cursor: pointer;
         }
@@ -273,10 +274,10 @@
         }
 
         .stat-card {
-            background-color: white;
+            background-color: #fff;
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e5e5e5;
         }
 
         .stat-label {
@@ -288,7 +289,7 @@
         .stat-value {
             font-size: 32px;
             font-weight: 700;
-            color: #1a2d7c;
+            color: #0B2F5D;
             margin-bottom: 8px;
         }
 
@@ -322,17 +323,17 @@
         }
 
         .card {
-            background-color: white;
+            background-color: #fff;
             border-radius: 12px;
             padding: 24px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e5e5e5;
         }
 
         .card-title {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         /* Bar Chart */
@@ -354,7 +355,7 @@
 
         .chart-bar {
             width: 100%;
-            background-color: #1a2d7c;
+            background-color: #0B2F5D;
             border-radius: 6px 6px 0 0;
             transition: all 0.3s;
             cursor: pointer;
@@ -362,8 +363,8 @@
         }
 
         .chart-bar:hover {
-            background-color: #f5c300;
-            box-shadow: 0 0 20px rgba(245, 195, 0, 0.4);
+            background-color: #c8a94a;
+            box-shadow: 0 0 20px rgba(200, 169, 74, 0.4);
         }
 
         .chart-label {
@@ -379,12 +380,12 @@
         }
 
         .chart-pill {
-            background-color: #f3f5fb;
+            background-color: #f0f2f5;
             padding: 8px 16px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 500;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         /* Recent Conversations */
@@ -393,7 +394,7 @@
             align-items: center;
             gap: 16px;
             padding: 16px 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e5e5e5;
         }
 
         .conversation-item:last-child {
@@ -403,12 +404,12 @@
         .conv-avatar {
             width: 40px;
             height: 40px;
-            background-color: #1a2d7c;
+            background-color: #0B2F5D;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #c8a94a;
             font-weight: 600;
             font-size: 14px;
         }
@@ -420,7 +421,7 @@
         .conv-name {
             font-weight: 600;
             font-size: 14px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .conv-message {
@@ -486,12 +487,12 @@
         .topic-percent {
             font-size: 14px;
             font-weight: 600;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .progress-bar {
             height: 8px;
-            background-color: #e2e8f0;
+            background-color: #e5e5e5;
             border-radius: 4px;
             overflow: hidden;
         }
@@ -502,8 +503,8 @@
             transition: width 0.3s;
         }
 
-        .progress-fill.blue { background-color: #1a2d7c; }
-        .progress-fill.yellow { background-color: #f5c300; }
+        .progress-fill.blue { background-color: #0B2F5D; }
+        .progress-fill.yellow { background-color: #c8a94a; }
         .progress-fill.green { background-color: #22c55e; }
         .progress-fill.purple { background-color: #8b5cf6; }
         .progress-fill.orange { background-color: #f97316; }
@@ -517,8 +518,8 @@
         }
 
         .quick-action-card {
-            background-color: #f3f5fb;
-            border: 1px solid #e2e8f0;
+            background-color: #f0f2f5;
+            border: 1px solid #e5e5e5;
             border-radius: 10px;
             padding: 20px;
             cursor: pointer;
@@ -529,8 +530,8 @@
         }
 
         .quick-action-card:hover {
-            background-color: #1a2d7c;
-            color: #f5c300;
+            background-color: #0B2F5D;
+            color: #c8a94a;
         }
 
         .quick-action-card i {
@@ -588,7 +589,7 @@
         .alert-text {
             flex: 1;
             font-size: 13px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         /* Conversations View */
@@ -611,14 +612,14 @@
         }
 
         .filter-pill:hover {
-            border-color: #1a2d7c;
-            color: #1a2d7c;
+            border-color: #0B2F5D;
+            color: #0B2F5D;
         }
 
         .filter-pill.active {
-            background-color: #1a2d7c;
-            color: white;
-            border-color: #1a2d7c;
+            background-color: #0B2F5D;
+            color: #c8a94a;
+            border-color: #0B2F5D;
         }
 
         .data-table {
@@ -647,8 +648,8 @@
 
         .btn-view {
             padding: 6px 16px;
-            background-color: #1a2d7c;
-            color: white;
+            background-color: #0B2F5D;
+            color: #c8a94a;
             border: none;
             border-radius: 6px;
             font-size: 13px;
@@ -658,7 +659,7 @@
         }
 
         .btn-view:hover {
-            background-color: #0e1a5e;
+            background-color: #082040;
         }
 
         .role-pill {
@@ -718,7 +719,7 @@
         .alert-row-title {
             font-weight: 600;
             font-size: 15px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .alert-row-time {
@@ -736,8 +737,8 @@
 
         .btn-add {
             padding: 10px 20px;
-            background-color: #1a2d7c;
-            color: white;
+            background-color: #0B2F5D;
+            color: #c8a94a;
             border: none;
             border-radius: 8px;
             font-size: 14px;
@@ -750,7 +751,7 @@
         }
 
         .btn-add:hover {
-            background-color: #0e1a5e;
+            background-color: #082040;
         }
 
         .faq-item {
@@ -767,8 +768,8 @@
         .faq-number {
             width: 32px;
             height: 32px;
-            background-color: #1a2d7c;
-            color: white;
+            background-color: #0B2F5D;
+            color: #c8a94a;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -785,7 +786,7 @@
         .faq-question {
             font-weight: 600;
             font-size: 15px;
-            color: #1a2d7c;
+            color: #0B2F5D;
             margin-bottom: 6px;
         }
 
@@ -815,8 +816,8 @@
         }
 
         .btn-icon:hover {
-            border-color: #1a2d7c;
-            color: #1a2d7c;
+            border-color: #0B2F5D;
+            color: #0B2F5D;
         }
 
         .btn-icon.delete:hover {
@@ -860,7 +861,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 700;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .modal-close {
@@ -880,7 +881,7 @@
 
         .modal-close:hover {
             background-color: #e2e8f0;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .form-group {
@@ -891,7 +892,7 @@
             display: block;
             font-size: 14px;
             font-weight: 500;
-            color: #1a2d7c;
+            color: #0B2F5D;
             margin-bottom: 8px;
         }
 
@@ -907,8 +908,8 @@
 
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
-            border-color: #1a2d7c;
-            box-shadow: 0 0 0 3px rgba(26, 45, 124, 0.1);
+            border-color: #0B2F5D;
+            box-shadow: 0 0 0 3px rgba(11, 47, 93, 0.1);
         }
 
         .form-textarea {
@@ -937,13 +938,13 @@
 
         .btn-cancel:hover {
             background-color: #f1f5f9;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .btn-save {
             padding: 10px 20px;
-            background-color: #1a2d7c;
-            color: white;
+            background-color: #0B2F5D;
+            color: #c8a94a;
             border: none;
             border-radius: 8px;
             font-size: 14px;
@@ -953,7 +954,7 @@
         }
 
         .btn-save:hover {
-            background-color: #0e1a5e;
+            background-color: #082040;
         }
 
         /* Topic Analytics */
@@ -990,7 +991,7 @@
         .unanswered-text {
             flex: 1;
             font-size: 14px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .unanswered-count {
@@ -1020,7 +1021,7 @@
         .status-label {
             font-weight: 500;
             font-size: 14px;
-            color: #1a2d7c;
+            color: #0B2F5D;
         }
 
         .status-value {
@@ -1046,24 +1047,172 @@
             font-weight: 700;
             color: #a16207;
         }
+
+        /* Admin Login Screen */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e8eaf0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .login-overlay.hidden {
+            display: none;
+        }
+
+        .login-card {
+            background-color: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 400px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+            object-fit: contain;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0B2F5D;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .login-input:focus {
+            border-color: #0B2F5D;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #0B2F5D;
+            color: #c8a94a;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .login-btn:hover {
+            background-color: #082040;
+        }
+
+        .login-error {
+            color: #ef4444;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        .login-back {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-back a {
+            color: #0B2F5D;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .demo-accounts {
+            background-color: #fefce8;
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 12px;
+        }
+
+        .demo-accounts p {
+            margin: 4px 0;
+            color: #854d0e;
+        }
+
+        .demo-accounts strong {
+            color: #a16207;
+        }
     </style>
 </head>
 <body>
+    <!-- Admin Login Overlay -->
+    <div class="login-overlay" id="adminLoginOverlay">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png" alt="FSUU Logo" class="login-logo">
+                <h2 class="login-title">UniAssist Admin</h2>
+                <p class="login-subtitle">Staff & Administrator Login</p>
+            </div>
+            <div class="login-form">
+                <input type="email" class="login-input" id="adminEmail" placeholder="Admin email (@urios.edu.ph)">
+                <div style="position: relative;">
+                    <input type="password" class="login-input" id="adminPassword" placeholder="Password" style="padding-right: 45px;">
+                    <i class="ti ti-eye" id="adminEye" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #bbb; cursor: pointer;" onclick="toggleAdminPassword()"></i>
+                </div>
+                <div class="login-error" id="loginError">Invalid credentials. Please try again.</div>
+                <button class="login-btn" onclick="adminLogin()">Sign In</button>
+                <div class="demo-accounts">
+                    <p>Admin: admin@urios.edu.ph / FSUU@Admin2025</p>
+                    <p>SCO: sco@urios.edu.ph / SCO@CommBot2025</p>
+                </div>
+            </div>
+            <div class="login-back">
+                <a href="fsuu_sco_chatbot.html">← Back to Chatbot</a>
+            </div>
+        </div>
+    </div>
+
     <div class="layout">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <div class="logo">
-                    <svg viewBox="0 0 52 52">
-                        <rect x="4" y="4" width="40" height="32" rx="8" fill="#1a2d7c"/>
-                        <polygon points="10,36 10,46 20,36" fill="#1a2d7c"/>
-                        <circle cx="17" cy="18" r="3.5" fill="#f5c300"/>
-                        <circle cx="31" cy="18" r="3.5" fill="#f5c300"/>
-                        <circle cx="18.2" cy="16.8" r="1" fill="white"/>
-                        <circle cx="32.2" cy="16.8" r="1" fill="white"/>
-                        <path d="M15 25 Q24 31 33 25" stroke="#f5c300" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-                    </svg>
-                    <span class="logo-text">CommBot</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png" alt="FSUU Logo">
+                    <span class="logo-text">UniAssist</span>
                 </div>
             </div>
             <nav class="sidebar-nav">
@@ -1110,10 +1259,13 @@
                 <div class="user-info">
                     <div class="user-avatar">SA</div>
                     <div class="user-details">
-                        <div class="user-name">SCO Admin</div>
+                        <div class="user-name">UniAssist Admin</div>
                         <div class="user-role">Administrator</div>
                     </div>
                 </div>
+                <button onclick="adminLogout()" style="margin-top: 12px; width: 100%; padding: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; color: white; font-size: 13px; cursor: pointer; transition: all 0.2s;">
+                    <i class="ti ti-logout" style="margin-right: 6px;"></i> Sign Out
+                </button>
             </div>
         </aside>
 
@@ -1700,7 +1852,7 @@
                             <h3 class="card-title">Bot Configuration</h3>
                             <div class="form-group">
                                 <label class="form-label">Bot Display Name</label>
-                                <input type="text" class="form-input" value="FSUU CommBot">
+                                <input type="text" class="form-input" value="UniAssist">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">SCO Email Address</label>
@@ -1708,7 +1860,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Welcome Message</label>
-                                <textarea class="form-textarea">Hello! I'm the FSUU SCO CommBot. How can I help you today?</textarea>
+                                <textarea class="form-textarea">Hello! I'm the UniAssist AI. How can I help you today?</textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Response Language</label>
@@ -1723,7 +1875,7 @@
                         <div class="card">
                             <h3 class="card-title">System Status</h3>
                             <div class="status-item">
-                                <span class="status-label">CommBot AI</span>
+                                <span class="status-label">UniAssist AI</span>
                                 <span class="status-value">Online</span>
                             </div>
                             <div class="status-item">
@@ -1872,6 +2024,60 @@
                 pill.classList.add('active');
             });
         });
+
+        // Admin Login
+        function toggleAdminPassword() {
+            const passwordInput = document.getElementById('adminPassword');
+            const eyeIcon = document.getElementById('adminEye');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('ti-eye');
+                eyeIcon.classList.add('ti-eye-off');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('ti-eye-off');
+                eyeIcon.classList.add('ti-eye');
+            }
+        }
+
+        function adminLogin() {
+            const email = document.getElementById('adminEmail').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            // Demo account validation - in production, this would be a real backend check
+            const validAccounts = [
+                { email: 'admin@urios.edu.ph', password: 'FSUU@Admin2025' },
+                { email: 'sco@urios.edu.ph', password: 'SCO@CommBot2025' }
+            ];
+
+            const isValid = validAccounts.some(account =>
+                account.email === email && account.password === password
+            );
+
+            if (isValid) {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminEmail', email);
+                document.getElementById('adminLoginOverlay').classList.add('hidden');
+            } else {
+                errorDiv.classList.add('show');
+            }
+        }
+
+        // Check if already logged in (session storage)
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            document.getElementById('adminLoginOverlay').classList.add('hidden');
+        }
+
+        // Admin Logout
+        function adminLogout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('adminLoginOverlay').classList.remove('hidden');
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').classList.remove('show');
+        }
     </script>
 </body>
 </html>
