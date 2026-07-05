@@ -21,14 +21,16 @@
       background: #e8eaf0;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       min-height: 100vh;
-      padding: 24px 0;
+      padding: 24px;
+      overflow-x: hidden;
     }
 
     #phone {
-      width: 365px;
-      height: 730px;
+      width: min(92vw, 430px);
+      height: min(90vh, 820px);
+      max-height: 860px;
       background: #f0f2f5;
       border-radius: 38px;
       border: 2.5px solid #bbb;
@@ -38,6 +40,7 @@
       position: relative;
       font-family: 'Inter', sans-serif;
       box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+      touch-action: manipulation;
     }
 
     .sbar {
@@ -72,6 +75,8 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.28s cubic-bezier(.4, 0, .2, 1);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .screen.gone {
@@ -412,41 +417,39 @@
     }
     
     /* Responsive Design */
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
       body {
         background: #f0f2f5;
         padding: 0;
-        align-items: flex-start;
+        align-items: stretch;
       }
+
       #phone {
         width: 100vw;
         height: 100dvh;
+        max-height: 100dvh;
         border-radius: 0;
         border: none;
         box-shadow: none;
         margin: 0;
       }
+    }
+
+    @media (max-width: 600px) {
       .inp {
         font-size: 16px;
       }
+
       .inp::placeholder {
         font-size: 16px;
       }
-    }
-    
-    @media (min-width: 601px) and (max-width: 900px) {
-      #phone {
-        width: 420px;
-        height: 90vh;
-        border-radius: 28px;
+
+      .name-grid {
+        grid-template-columns: 1fr;
       }
-    }
-    
-    @media (min-width: 901px) {
-      #phone {
-        width: 365px;
-        height: 730px;
-        border-radius: 38px;
+
+      .topic-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -562,7 +565,7 @@
           Sign up with Google (Urios Gmail)
         </button>
         <div class="divider"><span>or register with email</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div><label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">First
               name</label><input class="inp" id="su-first" type="text" placeholder="Juan" /></div>
           <div><label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">Last
@@ -587,7 +590,7 @@
           <div style="position:relative;">
             <input class="inp" id="su-pass" type="password" placeholder="Min. 8 characters"
               style="padding-right:40px;" />
-            <i class="ti ti-eye" id="su-eye"
+            <i class="tni ti-eye" id="su-eye"
               style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;cursor:pointer;"
               onclick="togglePw('su-pass','su-eye')"></i>
           </div>
@@ -667,7 +670,7 @@
       <div
         style="font-size:10px;font-weight:600;color:#999;padding:13px 16px 5px;letter-spacing:0.5px;text-transform:uppercase;">
         Quick topics</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;">
+      <div class="topic-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;">
         <div class="qc" onclick="openChat('enrollment')">
           <div class="qi" style="background:#e8eef8;"><i class="ti ti-user-plus" style="color:#0B2F5D;"></i></div>
           <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Enrollment</div>

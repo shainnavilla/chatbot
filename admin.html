@@ -856,7 +856,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom:  the 24px;
+            margin-bottom: 24px;
         }
 
         .modal-title {
@@ -1207,180 +1207,255 @@
         }
         
         /* Responsive Media Queries */
+        body {
+            overflow-x: hidden;
+        }
+
+        body.sidebar-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .dashboard-row,
+            .dashboard-row-3,
+            .analytics-row,
+            .settings-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 24px;
+            }
+
+            .top-bar {
+                padding: 16px 24px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
             .sidebar {
                 position: fixed;
                 left: 0;
                 top: 0;
+                width: min(280px, 85vw);
                 height: 100vh;
-                transform: translateX(-220px);
+                transform: translateX(-100%);
                 transition: transform 0.3s ease;
                 z-index: 100;
             }
-            
+
             body.sidebar-open .sidebar {
                 transform: translateX(0);
             }
-            
+
             .sidebar-toggle {
                 display: block;
             }
-            
-            #main {
+
+            .main-content {
                 margin-left: 0;
                 width: 100%;
             }
-            
-            .layout {
-                flex-direction: column;
-            }
-            
+
             .top-bar {
-                margin-left: 0;
+                padding: 14px 16px;
+                gap: 12px;
+                flex-wrap: wrap;
             }
-            
-            .page-sub {
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .top-bar-right {
+                margin-left: auto;
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+
+            .current-date {
                 display: none;
             }
-            
-            .tb-status {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+
+            .content-area {
+                padding: 16px;
             }
-            
-            .tb-status i {
-                display: block;
-            }
-            
-            .tb-status span {
-                display: none;
-            }
-            
-            .admin-info span {
-                display: none;
-            }
-            
-            .stats {
+
+            .stats-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 16px;
             }
-            
-            .row2 {
+
+            .dashboard-row,
+            .dashboard-row-3,
+            .analytics-row,
+            .settings-row {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 16px;
             }
-            
-            .row3 {
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-            
-            .table-container table {
-                font-size: 12px;
-            }
-            
-            .action-btn {
-                padding: 4px 8px;
-                font-size: 11px;
-            }
-            
-            #editAnswerModal, #addFaqModal, #addUserModal, #alertModal, #settingsModal {
-                width: 90vw;
-                max-width: 500px;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .table-container {
-                overflow-x: auto;
-            }
-            
-            /* Hide columns for conversations table */
-            .conversations-table th:nth-child(3),
-            .conversations-table td:nth-child(3),
-            .conversations-table th:nth-child(4),
-            .conversations-table td:nth-child(4) {
-                display: none;
-            }
-            
-            /* Hide columns for users table */
-            .users-table th:nth-child(2),
-            .users-table td:nth-child(2),
-            .users-table th:nth-child(5),
-            .users-table td:nth-child(5) {
-                display: none;
-            }
-            
-            .faq-item {
-                flex-direction: column;
-            }
-            
-            .faq-actions {
-                flex-direction: column;
-                width: 100%;
-                gap: 8px;
-            }
-            
-            .faq-actions button {
-                width: 100%;
-                font-size: 11px;
-            }
-            
-            .faq-answer {
-                font-size: 11px;
-            }
-            
+
+            .card,
             .stat-card {
                 padding: 16px;
             }
-            
+
+            .chart-container {
+                gap: 8px;
+                height: 180px;
+            }
+
+            .chart-label {
+                font-size: 10px;
+            }
+
+            .chart-pills {
+                gap: 8px;
+            }
+
+            .conversation-item,
+            .alert-row,
+            .faq-item,
+            .status-item {
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+
+            .conv-message {
+                max-width: 100%;
+                white-space: normal;
+            }
+
+            .faq-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .btn-add {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .quick-actions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .filter-pills {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .filter-pill {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .card {
+                overflow-x: auto;
+            }
+
+            .data-table {
+                min-width: 620px;
+            }
+
+            .modal {
+                width: min(92vw, 500px);
+                padding: 24px;
+            }
+
+            .login-card {
+                width: min(92vw, 400px);
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-actions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-actions {
+                width: 100%;
+                gap: 8px;
+            }
+
+            .faq-actions .btn-icon {
+                flex: 1;
+            }
+
+            .faq-answer {
+                font-size: 13px;
+            }
+
             .stat-value {
                 font-size: 24px;
             }
-            
+
             .stat-label {
                 font-size: 12px;
             }
+
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .btn-cancel,
+            .btn-save {
+                width: 100%;
+            }
         }
-        
+
         @media (max-width: 480px) {
             .sidebar {
                 width: 100%;
             }
-            
-            .stats {
-                grid-template-columns: 1fr;
+
+            .top-bar-right {
+                width: 100%;
+                justify-content: space-between;
             }
-            
-            .row3 {
-                grid-template-columns: 1fr;
+
+            .current-date {
+                display: none;
             }
-            
-            .stat-card {
-                padding: 12px;
+
+            .bot-status span:last-child {
+                display: none;
             }
-            
-            .stat-value {
-                font-size: 20px;
+
+            .page-title {
+                font-size: 18px;
             }
-            
-            .stat-label {
-                font-size: 11px;
-            }
-            
+
             .logo-text {
                 font-size: 14px;
             }
-            
+
             .nav-item {
                 padding: 10px 16px;
                 font-size: 12px;
             }
-            
-            #editAnswerModal, #addFaqModal, #addUserModal, #alertModal, #settingsModal {
+
+            .modal {
                 width: 95vw;
                 padding: 16px;
+            }
+
+            .login-card {
+                padding: 20px;
             }
         }
     </style>
@@ -2196,6 +2271,10 @@
                 
                 // Update page title
                 pageTitle.textContent = viewTitles[viewId];
+
+                if (window.innerWidth <= 768) {
+                    document.body.classList.remove('sidebar-open');
+                }
             });
         });
 
