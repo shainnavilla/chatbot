@@ -1,1051 +1,771 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UniAssist</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>UniAssist — FSUU SCO</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+:root{
+  --blue:#0B2F5D; --blue2:#082040; --blue3:#1a3f7a;
+  --gold:#c8a94a; --gold2:#b89840;
+  --bg:#f3f5fb; --card:#fff; --border:#e2e8f0;
+  --text:#1a1a2e; --muted:#6b7280;
+  --green:#16a34a; --red:#dc2626;
+  --sidebar:260px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: #e8eaf0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 24px;
-      overflow-x: hidden;
-    }
+/* ═══════════════════════════════
+   LAYOUT — AUTH pages (splash/signin/signup)
+═══════════════════════════════ */
+.auth-page{
+  display:none; min-height:100vh;
+  background:linear-gradient(160deg,var(--blue2) 0%,var(--blue) 100%);
+  align-items:center; justify-content:center; padding:20px;
+}
+.auth-page.active{display:flex;}
+.auth-card{
+  background:#fff; border-radius:20px;
+  width:100%; max-width:420px;
+  padding:36px 32px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+}
+.auth-logo{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;margin-bottom:24px;text-align:center;}
+.auth-logo-icon{width:60px;height:60px;border-radius:14px;background:#fff;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.auth-logo-icon img{width:100%;height:100%;object-fit:contain;}
+.auth-title{font-size:22px;font-weight:700;color:var(--blue);}
+.auth-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+.auth-form-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.auth-form-sub{font-size:12px;color:var(--muted);margin-bottom:22px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:12px;font-weight:600;color:var(--text);display:block;margin-bottom:5px;}
+.form-inp{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);outline:none;transition:border 0.15s;background:#fff;}
+.form-inp:focus{border-color:var(--blue);}
+.form-inp.err{border-color:var(--red);}
+.form-inp::placeholder{color:#bbb;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.errmsg{font-size:11px;color:var(--red);margin-top:4px;display:none;}
+.errmsg.show{display:block;}
+.btn-primary{width:100%;background:var(--blue);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s;margin-top:4px;}
+.btn-primary:hover{background:var(--blue2);}
+.btn-google{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;color:#333;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;transition:background 0.15s;margin-bottom:6px;}
+.btn-google:hover{background:#f9f9f9;}
+.g-icon{width:18px;height:18px;flex-shrink:0;}
+.divider{display:flex;align-items:center;gap:10px;margin:14px 0;}
+.divider span{font-size:11px;color:#bbb;white-space:nowrap;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-link{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;}
+.auth-link a{color:var(--blue);font-weight:600;cursor:pointer;text-decoration:none;}
+.auth-link a:hover{text-decoration:underline;}
+.pw-wrap{position:relative;}
+.pw-eye{position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;cursor:pointer;}
+.guest-btn{width:100%;background:transparent;border:1.5px solid var(--border);border-radius:10px;padding:11px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;transition:border-color 0.15s;}
+.guest-btn:hover{border-color:var(--blue);color:var(--blue);}
 
-    #phone {
-      width: min(92vw, 430px);
-      height: min(90vh, 820px);
-      max-height: 860px;
-      background: #f0f2f5;
-      border-radius: 38px;
-      border: 2.5px solid #bbb;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      font-family: 'Inter', sans-serif;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
-      touch-action: manipulation;
-    }
+/* verify screen */
+.verify-icon{width:64px;height:64px;border-radius:50%;background:#edf7f0;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
 
-    .sbar {
-      height: 28px;
-      background: #0B2F5D;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      flex-shrink: 0;
-    }
+/* ═══════════════════════════════
+   LAYOUT — MAIN APP (sidebar + content)
+═══════════════════════════════ */
+#app-layout{
+  display:none; height:100vh; overflow:hidden;
+}
+#app-layout.active{display:flex;}
 
-    .sbar .st {
-      font-size: 11px;
-      font-weight: 600;
-      color: #fff;
-    }
+/* Sidebar */
+#sidebar{
+  width:var(--sidebar); flex-shrink:0;
+  background:linear-gradient(175deg,var(--blue2),var(--blue));
+  display:flex; flex-direction:column;
+  height:100vh; overflow:hidden;
+  transition:transform 0.3s ease;
+}
+.sb-head{padding:20px 18px 14px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.sb-brand{display:flex;align-items:center;gap:10px;}
+.sb-logo{width:38px;height:38px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;}
+.sb-logo img{width:100%;height:100%;object-fit:contain;}
+.sb-name{font-size:14px;font-weight:700;color:#fff;}
+.sb-dept{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px;}
+.sb-user{margin-top:12px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.07);border-radius:10px;padding:8px 10px;}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--blue2);flex-shrink:0;}
+.sb-uname{font-size:12px;font-weight:600;color:#fff;}
+.sb-urole{font-size:10px;color:rgba(255,255,255,0.45);}
+.sb-section{padding:14px 14px 4px;font-size:9px;font-weight:700;color:rgba(255,255,255,0.35);letter-spacing:0.7px;text-transform:uppercase;}
+.sb-nav{flex:1;overflow-y:auto;padding:4px 0;}
+.sb-nav::-webkit-scrollbar{display:none;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;margin:2px 8px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);transition:all 0.15s;border:none;background:none;width:calc(100% - 16px);text-align:left;font-family:'Inter',sans-serif;}
+.sb-item i{font-size:18px;flex-shrink:0;}
+.sb-item:hover{background:rgba(255,255,255,0.1);color:#fff;}
+.sb-item.active{background:var(--gold);color:var(--blue2);font-weight:600;}
+.sb-item.active i{color:var(--blue2);}
+.sb-bottom{padding:12px;border-top:1px solid rgba(255,255,255,0.1);}
+.sb-signout{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:rgba(255,255,255,0.5);transition:all 0.15s;width:100%;border:none;background:none;font-family:'Inter',sans-serif;}
+.sb-signout:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.sb-signout i{font-size:18px;}
 
-    .sbar .si {
-      font-size: 10px;
-      color: #fff;
-      display: flex;
-      gap: 5px;
-    }
+/* Main content */
+#main-content{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
-    .screen {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.28s cubic-bezier(.4, 0, .2, 1);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+/* Topbar */
+#topbar{
+  background:#fff;border-bottom:1px solid var(--border);
+  padding:0 24px;height:58px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+#hamburger{display:none;background:none;border:none;cursor:pointer;font-size:22px;color:var(--blue);padding:4px;}
+.page-title{font-size:17px;font-weight:700;color:var(--blue);}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.top-status{display:flex;align-items:center;gap:5px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:99px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--green);}
+.top-dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+.top-avatar{width:34px;height:34px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--blue2);cursor:pointer;flex-shrink:0;}
 
-    .screen.gone {
-      transform: translateX(100%);
-    }
+/* Mobile overlay */
+#sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:99;}
 
-    .inp {
-      width: 100%;
-      border: 1.5px solid #ddd;
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-family: 'Inter', sans-serif;
-      color: #1a1a1a;
-      background: #fff;
-      outline: none;
-      transition: border 0.15s;
-    }
+/* ═══════════════════════════════
+   PANELS (views inside main)
+═══════════════════════════════ */
+.panel{display:none;flex:1;overflow-y:auto;padding:24px;}
+.panel::-webkit-scrollbar{width:5px;}
+.panel::-webkit-scrollbar-thumb{background:#dde3ef;border-radius:99px;}
+.panel.active{display:block;}
 
-    .inp:focus {
-      border-color: #0B2F5D;
-    }
+/* HOME panel */
+.home-welcome{background:linear-gradient(135deg,var(--blue2),var(--blue));border-radius:16px;padding:22px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+.hw-text .greeting{font-size:11px;color:var(--gold);font-weight:600;margin-bottom:3px;}
+.hw-text .name{font-size:20px;font-weight:700;color:#fff;margin-bottom:2px;}
+.hw-text .sub{font-size:12px;color:rgba(255,255,255,0.55);}
+.hw-icon{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
-    .inp.err {
-      border-color: #e24b4a;
-    }
+.search-bar{background:#fff;border:1px solid var(--border);border-radius:12px;padding:11px 16px;display:flex;align-items:center;gap:10px;margin-bottom:22px;box-shadow:0 1px 4px rgba(0,0,0,0.04);}
+.search-bar i{font-size:16px;color:#aaa;}
+.search-bar input{flex:1;border:none;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:transparent;}
+.search-bar input::placeholder{color:#bbb;}
 
-    .inp::placeholder {
-      color: #bbb;
-    }
+.section-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:0.6px;text-transform:uppercase;margin-bottom:12px;}
 
-    .btn-main {
-      width: 100%;
-      background: #0B2F5D;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #fff;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      transition: background 0.15s;
-    }
+topics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.topic-card{background:#fff;border-radius:14px;padding:16px 14px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.topic-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 6px 20px rgba(11,47,93,0.12);}
+.topic-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;}
+.topic-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.topic-desc{font-size:11px;color:var(--muted);}
 
-    .btn-main:hover {
-      background: #142a50;
-    }
+.recent-list{display:flex;flex-direction:column;gap:10px;}
+.recent-item{background:#fff;border-radius:12px;padding:13px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;border:1px solid var(--border);transition:background 0.12s;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.recent-item:hover{background:#f8f9fc;}
+.recent-av{width:42px;height:42px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.recent-info{flex:1;min-width:0;}
+.recent-name{font-size:13px;font-weight:600;color:var(--text);}
+.recent-prev{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;}
+.recent-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.recent-time{font-size:11px;color:#bbb;}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);}
 
-    .btn-ghost {
-      width: 100%;
-      background: transparent;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
-      border-radius: 10px;
-      padding: 11px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #fff;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-    }
+/* CHAT panel */
+#panel-chat{padding:0;display:none;flex-direction:column;}
+#panel-chat.active{display:flex;}
+.chat-topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.chat-bot-av{width:38px;height:38px;border-radius:10px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.chat-bot-name{font-size:14px;font-weight:700;color:var(--text);}
+.chat-bot-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);margin-top:2px;}
+.chat-bot-dot{width:5px;height:5px;border-radius:50%;background:var(--green);}
+.chat-topic-pills{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.chat-pill{background:var(--bg);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;font-weight:500;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.chat-pill:hover{background:var(--blue);color:var(--gold);border-color:var(--blue);}
+#msgs{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px;background:var(--bg);}
+#msgs::-webkit-scrollbar{width:5px;}
+#msgs::-webkit-scrollbar-thumb{background:#dde3ef;border-radius:99px;}
+.mw{display:flex;flex-direction:column;}
+.mw.u{align-items:flex-end;}
+.mw.b{align-items:flex-start;}
+.br{display:flex;gap:8px;align-items:flex-end;}
+.bav{width:32px;height:32px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.bub{padding:11px 15px;border-radius:18px;font-size:13px;line-height:1.6;max-width:520px;}
+.mw.u .bub{background:var(--blue);color:#fff;border-bottom-right-radius:4px;box-shadow:0 2px 8px rgba(11,47,93,0.25);}
+.mw.b .bub{background:#fff;color:var(--text);border-bottom-left-radius:4px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.mt{font-size:10px;color:#bbb;margin-top:4px;padding:0 4px;}
+.tyb{display:flex;gap:5px;align-items:center;padding:11px 15px;background:#fff;border-radius:18px;border-bottom-left-radius:4px;border:1px solid var(--border);width:60px;}
+.tyb span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bl 1.2s infinite;}
+.tyb span:nth-child(2){animation-delay:.2s;}
+.tyb span:nth-child(3){animation-delay:.4s;}
+@keyframes bl{0%,60%,100%{opacity:.2;}30%{opacity:1;}}
+#sugs{display:flex;flex-wrap:wrap;gap:8px;padding:12px 24px;background:#fff;border-top:1px solid var(--border);flex-shrink:0;}
+.sug-btn{background:var(--bg);border:1.5px solid var(--border);border-radius:99px;padding:7px 14px;font-size:12px;color:var(--blue);cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all 0.15s;}
+.sug-btn:hover{background:var(--blue);color:var(--gold);border-color:var(--blue);}
+.chat-input-row{background:#fff;border-top:1px solid var(--border);padding:14px 24px;display:flex;gap:10px;align-items:center;flex-shrink:0;}
+#mi{flex:1;border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;font-size:14px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg);outline:none;transition:border 0.15s;}
+#mi:focus{border-color:var(--blue);background:#fff;}
+#mi::placeholder{color:#bbb;}
+.send-btn{width:42px;height:42px;border-radius:12px;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.15s;}
+.send-btn:hover{background:var(--blue2);}
 
-    .errmsg {
-      font-size: 11px;
-      color: #e24b4a;
-      margin-top: 4px;
-      display: none;
-    }
+/* ALERTS panel */
+.alert-item{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--border);}
+.alert-item:last-child{border-bottom:none;}
+.alert-ico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.alert-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.alert-d{font-size:12px;color:var(--muted);line-height:1.55;}
+.alert-time{font-size:11px;color:#bbb;margin-top:4px;}
+.alert-card{background:#fff;border-radius:14px;border:1px solid var(--border);padding:0 20px;}
 
-    .errmsg.show {
-      display: block;
-    }
-
-    .link-txt {
-      font-size: 12px;
-      color: #0B2F5D;
-      cursor: pointer;
-      font-weight: 500;
-      text-decoration: underline;
-    }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-
-    .divider span {
-      font-size: 11px;
-      color: #bbb;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #e5e5e5;
-    }
-
-    .gmail-btn {
-      width: 100%;
-      background: #fff;
-      border: 1.5px solid #ddd;
-      border-radius: 10px;
-      padding: 11px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #333;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .g-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-    }
-
-    .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      background: #e8eef8;
-      border-radius: 6px;
-      padding: 2px 6px;
-      font-size: 9px;
-      font-weight: 600;
-      color: #0B2F5D;
-    }
-
-    .qc {
-      background: #fff;
-      border-radius: 12px;
-      padding: 12px 11px;
-      border: 1px solid #eee;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      transition: background 0.12s;
-    }
-
-    .qc:hover {
-      background: #f5f5f5;
-    }
-
-    .qi {
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-    }
-
-    .sug-btn {
-      background: #0B2F5D;
-      border: none;
-      border-radius: 16px;
-      padding: 6px 12px;
-      font-size: 11px;
-      color: #c8a94a;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    .sug-btn:hover {
-      background: #142a50;
-    }
-
-    .bub {
-      padding: 9px 12px;
-      border-radius: 16px;
-      font-size: 12px;
-      line-height: 1.6;
-      max-width: 230px;
-    }
-
-    .mw.u .bub {
-      background: #0B2F5D;
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .mw.b .bub {
-      background: #fff;
-      color: #1a1a1a;
-      border-bottom-left-radius: 4px;
-      border: 1px solid #e5d8b0;
-    }
-
-    .mw {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .mw.u {
-      align-items: flex-end;
-    }
-
-    .mw.b {
-      align-items: flex-start;
-    }
-
-    .br {
-      display: flex;
-      gap: 6px;
-      align-items: flex-end;
-    }
-
-    .bav {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #0B2F5D;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 8px;
-      font-weight: 600;
-      color: #c8a94a;
-      flex-shrink: 0;
-    }
-
-    .mt {
-      font-size: 9px;
-      color: #bbb;
-      margin-top: 3px;
-      padding: 0 3px;
-    }
-
-    .tyb {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      padding: 9px 12px;
-      background: #fff;
-      border-radius: 16px;
-      border-bottom-left-radius: 4px;
-      border: 1px solid #e5d8b0;
-      width: 50px;
-    }
-
-    .tyb span {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #c8a94a;
-      animation: bl 1.2s infinite;
-    }
-
-    .tyb span:nth-child(2) {
-      animation-delay: .2s;
-    }
-
-    .tyb span:nth-child(3) {
-      animation-delay: .4s;
-    }
-
-    @keyframes bl {
-
-      0%,
-      60%,
-      100% {
-        opacity: .25
-      }
-
-      30% {
-        opacity: 1
-      }
-    }
-
-    .ni {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      cursor: pointer;
-      padding: 5px 12px;
-      border-radius: 10px;
-    }
-
-    .ni i {
-      font-size: 19px;
-      color: #ccc;
-    }
-
-    .ni span {
-      font-size: 9px;
-      color: #ccc;
-      font-weight: 500;
-    }
-
-    .ni.on i {
-      color: #0B2F5D;
-    }
-
-    .ni.on span {
-      color: #0B2F5D;
-    }
-
-    .ca {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #0B2F5D;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-      color: #c8a94a;
-      flex-shrink: 0;
-    }
-
-    .conv-item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 11px;
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      cursor: pointer;
-      border: 1px solid #eee;
-    }
-
-    .conv-item:hover {
-      background: #f9f9f9;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 900px) {
-      body {
-        background: #f0f2f5;
-        padding: 0;
-        align-items: stretch;
-      }
-
-      #phone {
-        width: 100vw;
-        height: 100dvh;
-        max-height: 100dvh;
-        border-radius: 0;
-        border: none;
-        box-shadow: none;
-        margin: 0;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .inp {
-        font-size: 16px;
-      }
-
-      .inp::placeholder {
-        font-size: 16px;
-      }
-
-      .name-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .topic-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media(max-width:900px){
+  :root{--sidebar:260px;}
+  #sidebar{position:fixed;left:0;top:0;height:100vh;z-index:100;transform:translateX(-100%);}
+  body.sb-open #sidebar{transform:translateX(0);}
+  body.sb-open #sb-overlay{display:block;}
+  #main-content{margin-left:0!important;}
+  #hamburger{display:flex;}
+  .topics-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .panel{padding:16px;}
+  .home-welcome{padding:16px;}
+  .hw-text .name{font-size:17px;}
+  .topics-grid{grid-template-columns:1fr 1fr;}
+  .topic-card{padding:13px 11px;}
+  .chat-topbar{padding:12px 16px;flex-wrap:wrap;gap:8px;}
+  .chat-topic-pills{margin-left:0;width:100%;}
+  #msgs{padding:14px 12px;}
+  .bub{max-width:85vw;font-size:13px;}
+  #sugs{padding:10px 12px;}
+  .chat-input-row{padding:10px 12px;}
+  #mi{font-size:16px;}
+  .panel.active{display:block;}
+  #panel-chat.active{display:flex;}
+}
+@media(max-width:400px){
+  .topics-grid{grid-template-columns:1fr 1fr;}
+  .hw-icon{display:none;}
+}
+</style>
 </head>
-
 <body>
-  <div id="phone">
-    <div class="sbar"><span class="st">9:41</span>
-      <div class="si"><span>LTE</span><span>WiFi</span></div>
-    </div>
 
-    <!-- SPLASH -->
-    <div class="screen" id="splash-screen" style="background:#0B2F5D;align-items:center;justify-content:center;">
-      <div
-        style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:0 30px;text-align:center;width:100%;">
-        <div
-          style="width:72px;height:72px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-          <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png"
-            alt="FSUU Logo" style="width:100%;height:100%;object-fit:contain;" />
-        </div>
-        <div>
-          <div style="font-family:'Plus Jakarta Sans', sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:4px;">UniAssist</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);">Strategic Communication Office</div>
-        </div>
-
-        <button class="btn-main" style="background:#fff;color:#0B2F5D;margin-top:16px;"
-          onclick="showScreen('signin-screen')">Sign In</button>
-        <button class="btn-ghost" style="margin-top:12px;" onclick="startChattingAsGuest()">Continue as Guest</button>
+<!-- ═══════════════════════
+     SPLASH / WELCOME
+═══════════════════════════════ -->
+<div class="auth-page active" id="pg-splash">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png" alt="FSUU" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'ti ti-building-community\' style=\'font-size:28px;color:#0B2F5D;\'></i>'"/>
+      </div>
+      <div>
+        <div class="auth-title">UniAssist</div>
+        <div class="auth-sub">Strategic Communication Office · FSUU</div>
       </div>
     </div>
-
-    <!-- SIGN IN -->
-    <div class="screen gone" id="signin-screen" style="background:#fff;">
-      <div style="background:#0B2F5D;padding:20px 18px 16px;flex-shrink:0;">
-        <button onclick="window.location.href='index.html'"
-          style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:18px;margin-bottom:10px;display:flex;align-items:center;padding:0;">
-          <i class="ti ti-arrow-left"></i>
-        </button>
-        <div style="font-size:18px;font-weight:600;color:#fff;">Welcome back</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;">Sign in to your FSUU SCO account</div>
-      </div>
-      <div style="flex:1;overflow-y:auto;padding:22px 20px;display:flex;flex-direction:column;gap:14px;">
-        <button class="gmail-btn" onclick="gmailSignIn('signin')">
-          <svg class="g-icon" viewBox="0 0 24 24">
-            <path
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              fill="#4285F4" />
-            <path
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              fill="#34A853" />
-            <path
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-              fill="#FBBC05" />
-            <path
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              fill="#EA4335" />
-          </svg>
-          Continue with Google (Urios Gmail)
-        </button>
-        <div class="divider"><span>or sign in with email</span></div>
-        <div>
-          <label style="font-size:12px;font-weight:500;color:#555;display:block;margin-bottom:5px;">Email
-            address</label>
-          <input class="inp" id="si-email" type="email" placeholder="yourname@urios.edu.ph" />
-          <div class="errmsg" id="si-email-err">Please use your @urios.edu.ph email address.</div>
-        </div>
-        <div>
-          <label style="font-size:12px;font-weight:500;color:#555;display:block;margin-bottom:5px;">Password</label>
-          <div style="position:relative;">
-            <input class="inp" id="si-pass" type="password" placeholder="Enter your password"
-              style="padding-right:40px;" />
-            <i class="ti ti-eye" id="si-eye"
-              style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;cursor:pointer;"
-              onclick="togglePw('si-pass','si-eye')"></i>
-          </div>
-        </div>
-        <div style="text-align:right;margin-top:-6px;">
-          <span class="link-txt" onclick="showScreen('forgot-screen')">Forgot password?</span>
-        </div>
-        <button class="btn-main" onclick="doSignIn()">Sign in</button>
-        <button class="btn-ghost" style="margin-top:14px;border:2px solid #0B2F5D;background:#f8f9fa;color:#0B2F5D;font-weight:600;font-size:14px;padding:12px;border-radius:8px;" onclick="startChattingAsGuest()">Continue as Guest</button>
-        <p style="font-size:12px;color:#888;text-align:center;margin-top:14px;">Don't have an account? <span class="link-txt"
-            onclick="showScreen('signup-screen')">Create one</span></p>
-      </div>
-    </div>
-
-    <!-- SIGN UP -->
-    <div class="screen gone" id="signup-screen" style="background:#fff;">
-      <div style="background:#0B2F5D;padding:20px 18px 16px;flex-shrink:0;">
-        <button onclick="showScreen('signin-screen')"
-          style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:18px;margin-bottom:10px;display:flex;align-items:center;padding:0;">
-          <i class="ti ti-arrow-left"></i>
-        </button>
-        <div style="font-size:18px;font-weight:600;color:#fff;">Create account</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;">Use your FSUU Urios email</div>
-      </div>
-      <div style="flex:1;overflow-y:auto;padding:20px 20px;display:flex;flex-direction:column;gap:12px;">
-        <button class="gmail-btn" onclick="gmailSignIn('signup')">
-          <svg class="g-icon" viewBox="0 0 24 24">
-            <path
-              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-              fill="#4285F4" />
-            <path
-              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              fill="#34A853" />
-            <path
-              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-              fill="#FBBC05" />
-            <path
-              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              fill="#EA4335" />
-          </svg>
-          Sign up with Google (Urios Gmail)
-        </button>
-        <div class="divider"><span>or register with email</span></div>
-        <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div><label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">First
-              name</label><input class="inp" id="su-first" type="text" placeholder="Juan" /></div>
-          <div><label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">Last
-              name</label><input class="inp" id="su-last" type="text" placeholder="dela Cruz" /></div>
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">Urios email</label>
-          <input class="inp" id="su-email" type="email" placeholder="yourname@urios.edu.ph" />
-          <div class="errmsg" id="su-email-err">Only @urios.edu.ph emails are allowed.</div>
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">Role /
-            Department</label>
-          <select class="inp" id="su-role">
-            <option value="" disabled selected>Select your role</option>
-            <option>User</option>
-            <option>Admin</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:500;color:#555;display:block;margin-bottom:4px;">Password</label>
-          <div style="position:relative;">
-            <input class="inp" id="su-pass" type="password" placeholder="Min. 8 characters"
-              style="padding-right:40px;" />
-            <i class="tni ti-eye" id="su-eye"
-              style="position:absolute;right:13px;top:50%;transform:translateY(-50%);font-size:16px;color:#bbb;cursor:pointer;"
-              onclick="togglePw('su-pass','su-eye')"></i>
-          </div>
-          <div class="errmsg" id="su-pass-err">Password must be at least 8 characters.</div>
-        </div>
-        <button class="btn-main" onclick="doSignUp()">Create account</button>
-        <p style="font-size:12px;color:#888;text-align:center;">Already have an account? <span class="link-txt"
-            onclick="showScreen('signin-screen')">Sign in</span></p>
-      </div>
-    </div>
-
-    <!-- FORGOT PASSWORD -->
-    <div class="screen gone" id="forgot-screen" style="background:#fff;">
-      <div style="background:#0B2F5D;padding:20px 18px 16px;flex-shrink:0;">
-        <button onclick="showScreen('signin-screen')"
-          style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:18px;margin-bottom:10px;display:flex;align-items:center;padding:0;"><i
-            class="ti ti-arrow-left"></i></button>
-        <div style="font-size:18px;font-weight:600;color:#fff;">Reset password</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;">We'll send a reset link to your Urios
-          email</div>
-      </div>
-      <div style="flex:1;padding:22px 20px;display:flex;flex-direction:column;gap:14px;">
-        <div
-          style="background:#faf3e0;border:1px solid #c8a94a;border-radius:10px;padding:12px;display:flex;gap:10px;align-items:flex-start;">
-          <i class="ti ti-info-circle" style="font-size:16px;color:#c8a94a;flex-shrink:0;margin-top:1px;"></i>
-          <p style="font-size:12px;color:#7a5c00;line-height:1.5;">Enter your @urios.edu.ph email and we'll send a
-            password reset link within a few minutes.</p>
-        </div>
-        <div>
-          <label style="font-size:12px;font-weight:500;color:#555;display:block;margin-bottom:5px;">Urios email
-            address</label>
-          <input class="inp" id="fp-email" type="email" placeholder="yourname@urios.edu.ph" />
-          <div class="errmsg" id="fp-err">Please use your @urios.edu.ph email address.</div>
-        </div>
-        <button class="btn-main" onclick="doForgot()">Send reset link</button>
-      </div>
-    </div>
-
-    <!-- VERIFY -->
-    <div class="screen gone" id="verify-screen" style="background:#fff;align-items:center;justify-content:center;">
-      <div style="padding:30px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;">
-        <div
-          style="width:64px;height:64px;border-radius:50%;background:#edf7f0;display:flex;align-items:center;justify-content:center;">
-          <i class="ti ti-mail-check" style="font-size:30px;color:#1a7a4a;"></i>
-        </div>
-        <div>
-          <div style="font-size:16px;font-weight:600;color:#111;margin-bottom:6px;">Check your inbox</div>
-          <div style="font-size:12px;color:#888;line-height:1.6;">A verification link has been sent to your
-            <strong>@urios.edu.ph</strong> email. Click the link to activate your account.</div>
-        </div>
-        <button class="btn-main" style="margin-top:8px;" onclick="loginAndEnter()">Continue to app</button>
-        <span class="link-txt" onclick="showScreen('signin-screen')">Back to sign in</span>
-      </div>
-    </div>
-
-    <!-- HOME -->
-    <div class="screen gone" id="home-screen" style="background:#f0f2f5;padding-bottom:54px;overflow-y:auto;">
-      <div style="background:#0B2F5D;padding:22px 18px 14px;flex-shrink:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-size:11px;color:#c8a94a;font-weight:500;" id="h-greeting">Good morning</div>
-            <div style="font-family:'Plus Jakarta Sans', sans-serif;font-size:18px;font-weight:700;color:#fff;" id="h-name">UniAssist</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.55);">Strategic Communication Office</div>
-          </div>
-          <button onclick="doSignOut()"
-            style="background:rgba(255,255,255,0.15);border:none;border-radius:8px;padding:8px 12px;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;">
-            <i class="ti ti-logout" style="font-size:14px;"></i>
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </div>
-      <div
-        style="margin:12px 14px 0;background:#fff;border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;border:1px solid #e5e5e5;">
-        <i class="ti ti-search" style="font-size:15px;color:#aaa;"></i>
-        <span style="font-size:12px;color:#bbb;">Search topics, announcements...</span>
-      </div>
-      <div
-        style="font-size:10px;font-weight:600;color:#999;padding:13px 16px 5px;letter-spacing:0.5px;text-transform:uppercase;">
-        Quick topics</div>
-      <div class="topic-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px;">
-        <div class="qc" onclick="openChat('enrollment')">
-          <div class="qi" style="background:#e8eef8;"><i class="ti ti-user-plus" style="color:#0B2F5D;"></i></div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Enrollment</div>
-          <div style="font-size:10px;color:#aaa;">Steps & requirements</div>
-        </div>
-        <div class="qc" onclick="openChat('entrance exam')">
-          <div class="qi" style="background:#faf3e0;"><i class="ti ti-pencil" style="color:#c8a94a;"></i></div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Entrance Exam</div>
-          <div style="font-size:10px;color:#aaa;">FSUU Schedule & tips</div>
-        </div>
-        <div class="qc" onclick="openChat('programs')">
-          <div class="qi" style="background:#f5e8f8;"><i class="ti ti-building-community" style="color:#8a2be2;"></i>
-          </div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">FSUU Programs</div>
-          <div style="font-size:10px;color:#aaa;">Colleges & deans</div>
-        </div>
-        <div class="qc" onclick="openChat('student policies')">
-          <div class="qi" style="background:#ffe8ee;"><i class="ti ti-file-text" style="color:#e22b6a;"></i></div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Student Policies</div>
-          <div style="font-size:10px;color:#aaa;">Handbook & rules</div>
-        </div>
-        <div class="qc" onclick="openChat('media')">
-          <div class="qi" style="background:#e8eef8;"><i class="ti ti-microphone-2" style="color:#0B2F5D;"></i></div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Media & Press</div>
-          <div style="font-size:10px;color:#aaa;">Inquiries & releases</div>
-        </div>
-        <div class="qc" onclick="openChat('announcement')">
-          <div class="qi" style="background:#faf3e0;"><i class="ti ti-speakerphone" style="color:#c8a94a;"></i></div>
-          <div style="font-size:12px;font-weight:500;color:#1a1a1a;">Announcements</div>
-          <div style="font-size:10px;color:#aaa;">News & advisories</div>
-        </div>
-      </div>
-      <div
-        style="font-size:10px;font-weight:600;color:#999;padding:13px 16px 5px;letter-spacing:0.5px;text-transform:uppercase;">
-        Recent conversations</div>
-      <div style="padding:0 14px;display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
-        <div class="conv-item" onclick="openChat('enrollment')">
-          <div class="ca">SCO</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:12px;font-weight:500;color:#111;">SCO ComBot</div>
-            <div
-              style="font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">
-              Enrollment for AY 2025-2026 is now open...</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-            <div style="font-size:10px;color:#ccc;">10:22 AM</div>
-            <div style="width:7px;height:7px;border-radius:50%;background:#c8a94a;"></div>
-          </div>
-        </div>
-        <div class="conv-item" onclick="openChat('programs')">
-          <div class="ca">SCO</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:12px;font-weight:500;color:#111;">SCO ComBot</div>
-            <div
-              style="font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">
-              FSUU offers 8 programs including BS in...</div>
-          </div>
-          <div style="font-size:10px;color:#ccc;flex-shrink:0;">Yesterday</div>
-        </div>
-        <div class="conv-item" onclick="openChat('student policies')">
-          <div class="ca">SCO</div>
-          <div style="flex:1;min-width:0;">
-            <div style="font-size:12px;font-weight:500;color:#111;">SCO ComBot</div>
-            <div
-              style="font-size:11px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">
-              The student handbook covers attendance...</div>
-          </div>
-          <div style="font-size:10px;color:#ccc;flex-shrink:0;">Mon</div>
-        </div>
-      </div>
-      <div
-        style="position:absolute;bottom:0;left:0;width:100%;height:54px;background:#fff;border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-around;">
-        <div class="ni on"><i class="ti ti-home"></i><span>Home</span></div>
-        <div class="ni" onclick="openChat('')"><i class="ti ti-message-2"></i><span>Chat</span></div>
-        <div class="ni" onclick="showScreen('alerts-screen')"><i class="ti ti-bell"></i><span>Alerts</span></div>
-      </div>
-    </div>
-
-    <!-- CHAT -->
-    <div class="screen gone" id="chat-screen" style="background:#f0f2f5;">
-      <div class="sbar"></div>
-      <div style="background:#0B2F5D;padding:10px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;">
-        <button onclick="showScreen('home-screen')"
-          style="background:none;border:none;cursor:pointer;color:#c8a94a;font-size:19px;display:flex;align-items:center;"><i
-            class="ti ti-arrow-left"></i></button>
-        <div class="bav" style="width:30px;height:30px;font-size:9px;flex-shrink:0;">SCO</div>
-        <div style="flex:1;">
-          <div style="font-family:'Plus Jakarta Sans', sans-serif;font-size:13px;font-weight:700;color:#fff;">UniAssist <span class="ai-badge"><i
-                class="ti ti-sparkles" style="font-size:9px;"></i>AI</span></div>
-          <div style="font-size:10px;color:#4cbb8a;margin-top:1px;">Online — SCO Official</div>
-        </div>
-        <i class="ti ti-dots-vertical" style="color:#c8a94a;font-size:17px;cursor:pointer;"></i>
-      </div>
-      <div id="msgs" style="flex:1;overflow-y:auto;padding:11px 12px;display:flex;flex-direction:column;gap:9px;"></div>
-      <div id="sugs"
-        style="display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 6px;background:#f0f2f5;border-top:1px solid #e0e0e0;">
-      </div>
-      <div
-        style="background:#fff;border-top:1px solid #e8e8e8;padding:8px 10px;display:flex;gap:7px;align-items:center;flex-shrink:0;">
-        <input id="mi"
-          style="flex:1;border:1px solid #ddd;border-radius:20px;padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;color:#222;background:#fdfaf4;outline:none;"
-          placeholder="Ask the SCO anything..." />
-        <button onclick="sendMsg()"
-          style="width:34px;height:34px;border-radius:50%;background:#0B2F5D;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i
-            class="ti ti-send" style="font-size:15px;color:#c8a94a;"></i></button>
-      </div>
-    </div>
-
-    <!-- ALERTS -->
-    <div class="screen gone" id="alerts-screen" style="background:#f0f2f5;padding-bottom:54px;overflow-y:auto;">
-      <div style="background:#0B2F5D;padding:22px 18px 14px;flex-shrink:0;">
-        <div style="font-size:18px;font-weight:600;color:#fff;">Alerts</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;">Stay updated with SCO news</div>
-      </div>
-      <div style="padding:14px;display:flex;flex-direction:column;gap:12px;">
-        <div
-          style="background:#fff;border-radius:12px;padding:14px;border-left:4px solid #c8a94a;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <i class="ti ti-bell-ringing" style="font-size:16px;color:#c8a94a;"></i>
-            <div style="font-size:13px;font-weight:600;color:#1a1a1a;">Enrollment Open</div>
-            <div style="margin-left:auto;font-size:10px;color:#999;">2h ago</div>
-          </div>
-          <div style="font-size:12px;color:#555;line-height:1.5;">Enrollment for AY 2025-2026 is now open. Visit the
-            registrar's office or check the website for details.</div>
-        </div>
-        <div
-          style="background:#fff;border-radius:12px;padding:14px;border-left:4px solid #1a7a4a;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <i class="ti ti-calendar-event" style="font-size:16px;color:#1a7a4a;"></i>
-            <div style="font-size:13px;font-weight:600;color:#1a1a1a;">FSUU Schedule</div>
-            <div style="margin-left:auto;font-size:10px;color:#999;">1d ago</div>
-          </div>
-          <div style="font-size:12px;color:#555;line-height:1.5;">FSUU entrance exam will be held on July 15, 2025.
-            Registration closes on July 10.</div>
-        </div>
-        <div
-          style="background:#fff;border-radius:12px;padding:14px;border-left:4px solid #e24b4a;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <i class="ti ti-alert-triangle" style="font-size:16px;color:#e24b4a;"></i>
-            <div style="font-size:13px;font-weight:600;color:#1a1a1a;">Class Suspension</div>
-            <div style="margin-left:auto;font-size:10px;color:#999;">2d ago</div>
-          </div>
-          <div style="font-size:12px;color:#555;line-height:1.5;">Classes suspended on June 26 due to inclement weather.
-            Stay tuned for further updates.</div>
-        </div>
-        <div
-          style="background:#fff;border-radius:12px;padding:14px;border-left:4px solid #0B2F5D;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <i class="ti ti-info-circle" style="font-size:16px;color:#0B2F5D;"></i>
-            <div style="font-size:13px;font-weight:600;color:#1a1a1a;">New Program</div>
-            <div style="margin-left:auto;font-size:10px;color:#999;">3d ago</div>
-          </div>
-          <div style="font-size:12px;color:#555;line-height:1.5;">FSUU is launching a new BS in Data Science program for
-            the upcoming academic year.</div>
-        </div>
-      </div>
-      <div
-        style="position:absolute;bottom:0;left:0;width:100%;height:54px;background:#fff;border-top:1px solid #eee;display:flex;align-items:center;justify-content:space-around;">
-        <div class="ni" onclick="showScreen('home-screen')"><i class="ti ti-home"></i><span>Home</span></div>
-        <div class="ni" onclick="openChat('')"><i class="ti ti-message-2"></i><span>Chat</span></div>
-        <div class="ni on"><i class="ti ti-bell"></i><span>Alerts</span></div>
-      </div>
-    </div>
+    <button class="btn-primary" onclick="showPage('pg-signin')">Sign In</button>
+    <button class="guest-btn" onclick="loginAsGuest()">Continue as Guest</button>
+    <p style="text-align:center;font-size:11px;color:#bbb;margin-top:14px;"><a href="index.html" style="color:var(--gold);text-decoration:none;font-weight:600;">← Back to UniAssist</a></p>
   </div>
+</div>
 
-  <script>
-    // Auto-login check - skip splash screen when autologin parameter is true
-    const urlParams = new URLSearchParams(window.location.search);
-    const autoLoginMode = urlParams.get('autologin') === 'true';
+<!-- ═══════════════════════
+     SIGN IN
+═══════════════════════ -->
+<div class="auth-page" id="pg-signin">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">
+        <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png" alt="FSUU" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+    <div class="auth-form-title">Welcome back</div>
+    <div class="auth-form-sub">Sign in to your FSUU SCO account</div>
 
-    let currentUser = { name: '', email: '', initials: '', role: '' };
-    let chatHistory = [];
-    let busy = false;
+    <button class="btn-google" onclick="gmailSignIn('signin')">
+      <svg class="g-icon" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google (Urios Gmail)
+    </button>
+    <div class="divider"><span>or sign in with email</span></div>
 
-    const SYSTEM = `You are the official AI assistant for the Strategic Communication Office (SCO) of Father Saturnino Urios University (FSUU) in Butuan City, Philippines. Handle SCO topics (announcements, press releases, media inquiries, branding, events) and general FSUU info (admissions, departments, contacts, campus life). Be professional, warm, and concise — under 3 sentences when possible. Key info: SCO email sco@urios.edu.ph, website urios.edu.ph, Facebook facebook.com/FSUUofficial, event coverage needs 5 days lead time, unauthorized use of FSUU seal is prohibited.`;
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <input class="form-inp" id="si-email" type="email" placeholder="yourname@urios.edu.ph"/>
+      <div class="errmsg" id="si-email-err">Please use your @urios.edu.ph email address.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="pw-wrap">
+        <input class="form-inp" id="si-pass" type="password" placeholder="Enter your password" style="padding-right:42px;"/>
+        <i class="ti ti-eye pw-eye" id="si-eye" onclick="togglePw('si-pass','si-eye')"></i>
+      </div>
+    </div>
+    <div style="text-align:right;margin-bottom:14px;margin-top:-6px;">
+      <a onclick="showPage('pg-forgot')" style="font-size:12px;color:var(--blue);cursor:pointer;font-weight:500;">Forgot password?</a>
+    </div>
+    <button class="btn-primary" onclick="doSignIn()">Sign in</button>
+    <p class="auth-link">Don't have an account? <a onclick="showPage('pg-signup')">Create one</a></p>
+    <p class="auth-link" style="margin-top:6px;"><a onclick="showPage('pg-splash')">← Back</a></p>
+  </div>
+</div>
 
-    // Skip splash screen if autologin is enabled
-    if (autoLoginMode) {
-      window.addEventListener('DOMContentLoaded', () => {
-        showScreen('signin-screen');
-      });
-    }
+<!-- ═══════════════════════
+     SIGN UP
+═══════════════════════ -->
+<div class="auth-page" id="pg-signup">
+  <div class="auth-card" style="max-width:480px;">
+    <div class="auth-form-title">Create account</div>
+    <div class="auth-form-sub">Use your FSUU Urios email to register</div>
 
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(s => {
-        if (s.id !== id) s.classList.add('gone');
-        else s.classList.remove('gone');
-      });
-      // Update navigation state
-      document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
-      if (id === 'home-screen') document.querySelectorAll('.ni')[0].classList.add('on');
-      if (id === 'alerts-screen') document.querySelectorAll('.ni')[2].classList.add('on');
-    }
-    function startChatting() {
-      const hr = new Date().getHours();
-      const greet = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('h-greeting').textContent = greet;
-      showScreen('home-screen');
-    }
-    function startChattingAsGuest() {
-      currentUser = { name: 'Guest', email: '', initials: 'G', role: 'Guest' };
-      const hr = new Date().getHours();
-      const greet = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('h-greeting').textContent = greet;
-      document.getElementById('h-name').textContent = 'Guest 👋';
-      showScreen('home-screen');
-    }
-    function togglePw(inputId, eyeId) {
-      const inp = document.getElementById(inputId);
-      const eye = document.getElementById(eyeId);
-      if (inp.type === 'password') {
-        inp.type = 'text';
-        eye.classList.remove('ti-eye');
-        eye.classList.add('ti-eye-off');
-      } else {
-        inp.type = 'password';
-        eye.classList.remove('ti-eye-off');
-        eye.classList.add('ti-eye');
-      }
-    }
-    function isUriosEmail(e) { return e.toLowerCase().endsWith('@urios.edu.ph'); }
-    function doSignIn() {
-      const email = document.getElementById('si-email').value.trim();
-      const pass = document.getElementById('si-pass').value;
-      document.getElementById('si-email').classList.remove('err');
-      document.getElementById('si-email-err').classList.remove('show');
+    <button class="btn-google" onclick="gmailSignIn('signup')">
+      <svg class="g-icon" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Sign up with Google (Urios Gmail)
+    </button>
+    <div class="divider"><span>or register with email</span></div>
 
-      if (!email) { document.getElementById('si-email').classList.add('err'); document.getElementById('si-email-err').classList.add('show'); return; }
-      if (!isUriosEmail(email)) { document.getElementById('si-email').classList.add('err'); document.getElementById('si-email-err').classList.add('show'); return; }
-      if (!pass) { alert('Please enter your password'); return; }
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">First name</label><input class="form-inp" id="su-first" type="text" placeholder="Juan"/></div>
+      <div class="form-group"><label class="form-label">Last name</label><input class="form-inp" id="su-last" type="text" placeholder="dela Cruz"/></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Urios email</label>
+      <input class="form-inp" id="su-email" type="email" placeholder="yourname@urios.edu.ph"/>
+      <div class="errmsg" id="su-email-err">Only @urios.edu.ph emails are allowed.</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <select class="form-inp" id="su-role"><option value="" disabled selected>Select your role</option><option>User</option><option>Admin</option></select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <div class="pw-wrap">
+        <input class="form-inp" id="su-pass" type="password" placeholder="Min. 8 characters" style="padding-right:42px;"/>
+        <i class="ti ti-eye pw-eye" id="su-eye" onclick="togglePw('su-pass','su-eye')"></i>
+      </div>
+      <div class="errmsg" id="su-pass-err">Password must be at least 8 characters.</div>
+    </div>
+    <button class="btn-primary" onclick="doSignUp()">Create account</button>
+    <p class="auth-link">Already have an account? <a onclick="showPage('pg-signin')">Sign in</a></p>
+  </div>
+</div>
 
-      // Demo account validation
-      const demoAccounts = [
-        { email: 'admin@urios.edu.ph', password: 'FSUU@Admin2025', name: 'Admin User', role: 'Administrator' },
-        { email: 'sco@urios.edu.ph', password: 'SCO@CommBot2025', name: 'SCO Staff', role: 'SCO Staff' }
-      ];
+<!-- ═══════════════════════
+     FORGOT PASSWORD
+═══════════════════════ -->
+<div class="auth-page" id="pg-forgot">
+  <div class="auth-card">
+    <div class="auth-form-title">Reset password</div>
+    <div class="auth-form-sub">We'll send a reset link to your Urios email</div>
+    <div style="background:#fef9c3;border:1px solid #f5c300;border-radius:10px;padding:12px 14px;font-size:12px;color:#854d0e;margin-bottom:18px;line-height:1.6;">Enter your @urios.edu.ph email and we'll send a reset link within a few minutes.</div>
+    <div class="form-group">
+      <label class="form-label">Urios email address</label>
+      <input class="form-inp" id="fp-email" type="email" placeholder="yourname@urios.edu.ph"/>
+      <div class="errmsg" id="fp-err">Please use your @urios.edu.ph email address.</div>
+    </div>
+    <button class="btn-primary" onclick="doForgot()">Send reset link</button>
+    <p class="auth-link"><a onclick="showPage('pg-signin')">← Back to sign in</a></p>
+  </div>
+</div>
 
-      const demoAccount = demoAccounts.find(acc => acc.email === email && acc.password === pass);
+<!-- ═══════════════════════
+     VERIFY
+═══════════════════════ -->
+<div class="auth-page" id="pg-verify">
+  <div class="auth-card" style="text-align:center;">
+    <div class="verify-icon"><i class="ti ti-mail-check" style="font-size:28px;color:var(--green);"></i></div>
+    <div class="auth-form-title">Check your inbox</div>
+    <p style="font-size:13px;color:var(--muted);margin:10px 0 22px;line-height:1.6;">A verification link has been sent to your <strong>@urios.edu.ph</strong> email. Click the link to activate your account.</p>
+    <button class="btn-primary" onclick="loginAndEnter()">Continue to app</button>
+    <p class="auth-link"><a onclick="showPage('pg-signin')">Back to sign in</a></p>
+  </div>
+</div>
 
-      if (demoAccount) {
-        const parts = demoAccount.name.split(' ');
-        currentUser = { name: demoAccount.name, email, initials: (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(), role: demoAccount.role };
-      } else {
-        // Regular user validation - allow any @urios.edu.ph email with any password
-        const name = email.split('@')[0].replace(/[._]/g, ' ');
-        const parts = name.split(' ');
-        currentUser = { name: parts.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(' '), email, initials: (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase(), role: 'Member' };
-      }
-      loginAndEnter();
-    }
-    function doSignUp() {
-      const first = document.getElementById('su-first').value.trim();
-      const last = document.getElementById('su-last').value.trim();
-      const email = document.getElementById('su-email').value.trim();
-      const pass = document.getElementById('su-pass').value;
-      let ok = true;
-      document.getElementById('su-email').classList.remove('err'); document.getElementById('su-email-err').classList.remove('show');
-      document.getElementById('su-pass').classList.remove('err'); document.getElementById('su-pass-err').classList.remove('show');
-      if (!isUriosEmail(email)) { document.getElementById('su-email').classList.add('err'); document.getElementById('su-email-err').classList.add('show'); ok = false; }
-      if (pass.length < 8) { document.getElementById('su-pass').classList.add('err'); document.getElementById('su-pass-err').classList.add('show'); ok = false; }
-      if (!first || !last) ok = false;
-      if (!ok) return;
-      currentUser = { name: first.charAt(0).toUpperCase() + first.slice(1) + ' ' + last.charAt(0).toUpperCase() + last.slice(1), email, initials: (first[0] + last[0]).toUpperCase(), role: document.getElementById('su-role').value || 'Member' };
-      showScreen('verify-screen');
-    }
-    function doForgot() {
-      const email = document.getElementById('fp-email').value.trim();
-      document.getElementById('fp-email').classList.remove('err'); document.getElementById('fp-err').classList.remove('show');
-      if (!isUriosEmail(email)) { document.getElementById('fp-email').classList.add('err'); document.getElementById('fp-err').classList.add('show'); return; }
-      showScreen('verify-screen');
-    }
-    function gmailSignIn(type) {
-      currentUser = { name: 'Urios Student', email: 'student@urios.edu.ph', initials: 'US', role: 'Student' };
-      if (type === 'signup') showScreen('verify-screen');
-      else loginAndEnter();
-    }
-    function loginAndEnter() {
-      const hr = new Date().getHours();
-      const greet = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
-      document.getElementById('h-greeting').textContent = greet;
-      document.getElementById('h-name').textContent = currentUser.name + ' 👋';
-      const avatarEl = document.getElementById('user-avatar');
-      if (avatarEl) avatarEl.textContent = currentUser.initials;
-      showScreen('home-screen');
-    }
-    function doSignOut() {
-      currentUser = { name: '', email: '', initials: '', role: '' };
-      chatHistory = [];
-      showScreen('signin-screen');
-    }
-    const welcomes = {
-      '': 'Good day! I\'m the UniAssist AI. Ask me anything about enrollment, programs, student policies, media inquiries, or announcements.',
-      enrollment: 'Hi! You selected Enrollment. Ask me about enrollment steps, requirements, deadlines, or how to enroll at FSUU.',
-      'entrance exam': 'Hi! You selected Entrance Exam. Ask me about the entrance exam schedule, requirements, test coverage, or preparation tips.',
-      programs: 'Hi! You selected FSUU Programs. Ask me about FSUU colleges, available courses, deans, or program details.',
-      'student policies': 'Hi! You selected Student Policies. Ask me about the student handbook, attendance rules, dress code, or university policies.',
-      media: 'Hi! You selected Media & Press. Ask me about press requests, interview scheduling, or official FSUU press releases.',
-      announcement: 'Hi! You selected Announcements. Ask me about the latest FSUU news, advisories, or where to find official updates.',
-    };
-    const topicSugs = {
-      '': ['What is the SCO?', 'Enrollment requirements', 'Available programs', 'Contact numbers'],
-      enrollment: ['How to enroll?', 'Enrollment deadlines', 'Required documents', 'Tuition fees'],
-      'entrance exam': ['FSUU schedule', 'Exam requirements', 'Exam tips', 'Review centers'],
-      programs: ['List of courses', 'College of Engineering', 'College of Business', 'College of Arts'],
-      'student policies': ['Attendance policy', 'Dress code', 'Student handbook', 'Grading system'],
-      media: ['How to request interview?', 'Submit press release', 'Media guidelines', 'Email the SCO'],
-      announcement: ['Latest FSUU news', 'View advisories', 'Class suspensions', 'Where are announcements?'],
-    };
-    function getTime() { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
-    function addMsg(text, isUser) {
-      const msgsEl = document.getElementById('msgs');
-      const w = document.createElement('div'); w.className = 'mw ' + (isUser ? 'u' : 'b');
-      if (!isUser) {
-        const row = document.createElement('div'); row.className = 'br';
-        const av = document.createElement('div'); av.className = 'bav'; av.textContent = 'SCO';
-        const bub = document.createElement('div'); bub.className = 'bub'; bub.textContent = text;
-        row.appendChild(av); row.appendChild(bub); w.appendChild(row);
-      } else {
-        const bub = document.createElement('div'); bub.className = 'bub'; bub.textContent = text; w.appendChild(bub);
-      }
-      const t = document.createElement('div'); t.className = 'mt'; t.textContent = getTime(); w.appendChild(t);
-      msgsEl.appendChild(w); msgsEl.scrollTop = msgsEl.scrollHeight;
-    }
-    function showTyping() {
-      const msgsEl = document.getElementById('msgs');
-      const w = document.createElement('div'); w.className = 'mw b'; w.id = 'typ';
-      const row = document.createElement('div'); row.className = 'br';
-      const av = document.createElement('div'); av.className = 'bav'; av.textContent = 'SCO';
-      const t = document.createElement('div'); t.className = 'tyb'; t.innerHTML = '<span></span><span></span><span></span>';
-      row.appendChild(av); row.appendChild(t); w.appendChild(row); msgsEl.appendChild(w); msgsEl.scrollTop = msgsEl.scrollHeight;
-    }
-    function removeTyping() { const e = document.getElementById('typ'); if (e) e.remove(); }
-    function setSuggestions(topic) {
-      const sugsEl = document.getElementById('sugs'); sugsEl.innerHTML = '';
-      const list = topicSugs[topic] || topicSugs[''];
-      list.forEach(s => {
-        const btn = document.createElement('button'); btn.className = 'sug-btn'; btn.textContent = s;
-        btn.onclick = () => { if (!busy) { document.getElementById('mi').value = s; sendMsg(); } };
-        sugsEl.appendChild(btn);
-      });
-    }
-    function openChat(topic) {
-      document.getElementById('msgs').innerHTML = ''; chatHistory = [];
-      const w = welcomes[topic] || welcomes[''];
-      chatHistory.push({ role: 'assistant', content: w });
-      showScreen('chat-screen');
-      setTimeout(() => { addMsg(w, false); setSuggestions(topic); }, 200);
-      setTimeout(() => { document.getElementById('mi').focus(); }, 300);
-    }
-    async function sendMsg() {
-      const text = document.getElementById('mi').value.trim();
-      if (!text || busy) return;
-      busy = true;
-      document.getElementById('mi').value = '';
-      document.getElementById('sugs').innerHTML = '';
-      addMsg(text, true);
-      chatHistory.push({ role: 'user', content: text });
-      showTyping();
-      try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: chatHistory.slice(-10) })
-        });
-        const data = await res.json();
-        const reply = data.content && data.content[0] && data.content[0].text ? data.content[0].text : 'Thank you for your message. Please contact sco@urios.edu.ph for direct assistance.';
-        chatHistory.push({ role: 'assistant', content: reply });
-        removeTyping(); addMsg(reply, false);
-      } catch (e) {
-        removeTyping(); addMsg('Sorry, I\'m having trouble connecting. Please email sco@urios.edu.ph directly.', false);
-      }
-      busy = false;
-    }
-    document.getElementById('mi').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
-  </script>
+<!-- ═══════════════════════════════════
+     MAIN APP LAYOUT
+═══════════════════════════ -->
+<div id="sb-overlay" onclick="closeSidebar()"></div>
+
+<div id="app-layout">
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sb-head">
+      <div class="sb-brand">
+        <div class="sb-logo">
+          <img src="https://upload.wikimedia.org/wikipedia/en/8/87/Father_Saturnino_Urios_University_logo.png" alt="FSUU" onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'ti ti-building-community\' style=\'font-size:18px;color:#0B2F5D;\'></i>'"/>
+        </div>
+        <div>
+          <div class="sb-name">UniAssist</div>
+          <div class="sb-dept">SCO · FSUU</div>
+        </div>
+      </div>
+      <div class="sb-user" style="margin-top:12px;">
+        <div class="sb-avatar" id="sb-avatar">U</div>
+        <div>
+          <div class="sb-uname" id="sb-uname">User</div>
+          <div class="sb-urole" id="sb-urole">Member</div>
+        </div>
+      </div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Main</div>
+      <button class="sb-item active" onclick="showPanel('panel-home',this)"><i class="ti ti-home"></i> Home</button>
+      <button class="sb-item" onclick="showPanel('panel-chat',this)"><i class="ti ti-message-2"></i> Chat</button>
+      <button class="sb-item" onclick="showPanel('panel-alerts',this)"><i class="ti ti-bell"></i> Alerts</button>
+      <div class="sb-section">Topics</div>
+      <button class="sb-item" onclick="openChatTopic('enrollment',this)"><i class="ti ti-user-plus"></i> Enrollment</button>
+      <button class="sb-item" onclick="openChatTopic('entrance exam',this)"><i class="ti ti-pencil"></i> Entrance Exam</button>
+      <button class="sb-item" onclick="openChatTopic('programs',this)"><i class="ti ti-books"></i> FSUU Programs</button>
+      <button class="sb-item" onclick="openChatTopic('student policies',this)"><i class="ti ti-clipboard-list"></i> Student Policies</button>
+      <button class="sb-item" onclick="openChatTopic('media',this)"><i class="ti ti-microphone-2"></i> Media & Press</button>
+      <button class="sb-item" onclick="openChatTopic('announcement',this)"><i class="ti ti-speakerphone"></i> Announcements</button>
+    </div>
+    <div class="sb-bottom">
+      <button class="sb-signout" onclick="doSignOut()"><i class="ti ti-logout"></i> Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div id="main-content">
+    <!-- Topbar -->
+    <div id="topbar">
+      <div class="topbar-left">
+        <button id="hamburger" onclick="toggleSidebar()"><i class="ti ti-menu-2"></i></button>
+        <div class="page-title" id="page-title">Home</div>
+      </div>
+      <div class="topbar-right">
+        <div class="top-status"><div class="top-dot"></div> Bot Online</div>
+        <div class="top-avatar" id="top-avatar" onclick="doSignOut()" title="Sign out">U</div>
+      </div>
+    </div>
+
+    <!-- ── HOME ── -->
+    <div class="panel active" id="panel-home">
+      <div class="home-welcome">
+        <div class="hw-text">
+          <div class="greeting" id="h-greeting">Good morning</div>
+          <div class="name" id="h-name">Welcome 👋</div>
+          <div class="sub">Strategic Communication Office</div>
+        </div>
+        <div class="hw-icon">
+          <i class="ti ti-message-bolt" style="font-size:24px;color:var(--gold);"></i>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search topics, announcements..."/>
+      </div>
+
+      <div class="section-label">Quick Topics</div>
+      <div class="topics-grid">
+        <div class="topic-card" onclick="openChatTopic('enrollment',null)">
+          <div class="topic-icon" style="background:#e8eef8;"><i class="ti ti-user-plus" style="color:#0B2F5D;"></i></div>
+          <div class="topic-title">Enrollment</div>
+          <div class="topic-desc">Steps & requirements</div>
+        </div>
+        <div class="topic-card" onclick="openChatTopic('entrance exam',null)">
+          <div class="topic-icon" style="background:#faf3e0;"><i class="ti ti-pencil" style="color:#c8a94a;"></i></div>
+          <div class="topic-title">Entrance Exam</div>
+          <div class="topic-desc">FSUU Schedule & tips</div>
+        </div>
+        <div class="topic-card" onclick="openChatTopic('programs',null)">
+          <div class="topic-icon" style="background:#f5e8f8;"><i class="ti ti-building-community" style="color:#8a2be2;"></i></div>
+          <div class="topic-title">FSUU Programs</div>
+          <div class="topic-desc">Colleges & deans</div>
+        </div>
+        <div class="topic-card" onclick="openChatTopic('student policies',null)">
+          <div class="topic-icon" style="background:#ffe8ee;"><i class="ti ti-file-text" style="color:#e22b6a;"></i></div>
+          <div class="topic-title">Student Policies</div>
+          <div class="topic-desc">Handbook & rules</div>
+        </div>
+        <div class="topic-card" onclick="openChatTopic('media',null)">
+          <div class="topic-icon" style="background:#e8eef8;"><i class="ti ti-microphone-2" style="color:#0B2F5D;"></i></div>
+          <div class="topic-title">Media & Press</div>
+          <div class="topic-desc">Inquiries & releases</div>
+        </div>
+        <div class="topic-card" onclick="openChatTopic('announcement',null)">
+          <div class="topic-icon" style="background:#faf3e0;"><i class="ti ti-speakerphone" style="color:#c8a94a;"></i></div>
+          <div class="topic-title">Announcements</div>
+          <div class="topic-desc">News & advisories</div>
+        </div>
+      </div>
+
+      <div class="section-label">Recent Conversations</div>
+      <div class="recent-list">
+        <div class="recent-item" onclick="openChatTopic('enrollment',null)">
+          <div class="recent-av">SCO</div>
+          <div class="recent-info">
+            <div class="recent-name">SCO CommBot</div>
+            <div class="recent-prev">Enrollment for AY 2025–2026 is now open. Visit the...</div>
+          </div>
+          <div class="recent-meta"><div class="recent-time">10:22 AM</div><div class="unread-dot"></div></div>
+        </div>
+        <div class="recent-item" onclick="openChatTopic('programs',null)">
+          <div class="recent-av">SCO</div>
+          <div class="recent-info">
+            <div class="recent-name">SCO CommBot</div>
+            <div class="recent-prev">FSUU offers 8 programs including BS Nursing, Education...</div>
+          </div>
+          <div class="recent-meta"><div class="recent-time">Yesterday</div></div>
+        </div>
+        <div class="recent-item" onclick="openChatTopic('student policies',null)">
+          <div class="recent-av">SCO</div>
+          <div class="recent-info">
+            <div class="recent-name">SCO CommBot</div>
+            <div class="recent-prev">The student handbook covers attendance, dress code, and...</div>
+          </div>
+          <div class="recent-meta"><div class="recent-time">Mon</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CHAT ── -->
+    <div class="panel" id="panel-chat">
+      <div class="chat-topbar">
+        <div class="chat-bot-av">
+          <svg width="20" height="20" viewBox="0 0 52 52" fill="none"><rect x="4" y="4" width="40" height="32" rx="8" fill="#c8a94a"/><polygon points="10,36 10,46 20,36" fill="#c8a94a"/><circle cx="17" cy="18" r="3.5" fill="#0B2F5D"/><circle cx="31" cy="18" r="3.5" fill="#0B2F5D"/><path d="M15 25 Q24 31 33 25" stroke="#0B2F5D" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+        </div>
+        <div>
+          <div class="chat-bot-name">UniAssist · SCO CommBot</div>
+          <div class="chat-bot-status"><div class="chat-bot-dot"></div> Online — SCO Official</div>
+        </div>
+        <div class="chat-topic-pills">
+          <span class="chat-pill" onclick="openChatTopic('enrollment',null)">Enrollment</span>
+          <span class="chat-pill" onclick="openChatTopic('entrance exam',null)">ACET</span>
+          <span class="chat-pill" onclick="openChatTopic('programs',null)">Programs</span>
+          <span class="chat-pill" onclick="openChatTopic('student policies',null)">Policies</span>
+        </div>
+      </div>
+      <div id="msgs"></div>
+      <div id="sugs"></div>
+      <div class="chat-input-row">
+        <input id="mi" placeholder="Ask the SCO anything..." />
+        <button class="send-btn" onclick="sendMsg()"><i class="ti ti-send" style="font-size:16px;color:var(--gold);"></i></button>
+      </div>
+    </div>
+
+    <!-- ── ALERTS ── -->
+    <div class="panel" id="panel-alerts">
+      <div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:6px;">Alerts & Notifications</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:18px;">System events and bot activity that need your attention</div>
+      <div class="alert-card">
+        <div class="alert-item"><div class="alert-ico" style="background:#fee2e2;"><i class="ti ti-alert-circle" style="color:#dc2626;"></i></div><div><div class="alert-t" style="color:#dc2626;">3 unanswered queries need review</div><div class="alert-d">Users asked about scholarships — no bot response found.</div><div class="alert-time">5 minutes ago</div></div></div>
+        <div class="alert-item"><div class="alert-ico" style="background:#fef9c3;"><i class="ti ti-user-question" style="color:#854d0e;"></i></div><div><div class="alert-t">New media inquiry from external press</div><div class="alert-d">press@inquirer.net submitted a request via CommBot.</div><div class="alert-time">22 minutes ago</div></div></div>
+        <div class="alert-item"><div class="alert-ico" style="background:#dbeafe;"><i class="ti ti-messages" style="color:#1d4ed8;"></i></div><div><div class="alert-t">Conversation spike detected</div><div class="alert-d">287 messages received on Monday — highest this month.</div><div class="alert-time">1 hour ago</div></div></div>
+        <div class="alert-item"><div class="alert-ico" style="background:#dcfce7;"><i class="ti ti-check" style="color:#16a34a;"></i></div><div><div class="alert-t">Resolution rate hit 94.2% this week</div><div class="alert-d">Above target threshold of 90%.</div><div class="alert-time">2 hours ago</div></div></div>
+        <div class="alert-item"><div class="alert-ico" style="background:#f0fdf4;"><i class="ti ti-robot" style="color:#16a34a;"></i></div><div><div class="alert-t">Bot successfully restarted</div><div class="alert-d">All systems running normally after maintenance.</div><div class="alert-time">Yesterday 11:30 PM</div></div></div>
+      </div>
+    </div>
+  </div><!-- end main-content -->
+</div><!-- end app-layout -->
+
+<script>
+let currentUser={name:'',email:'',initials:'',role:''};
+let chatHistory=[],busy=false;
+
+const SYSTEM=`You are the official AI assistant for the Strategic Communication Office (SCO) of Father Saturnino Urios University (FSUU) in Butuan City, Philippines. Handle SCO topics (announcements, press releases, media inquiries, branding, events) and general FSUU info (admissions, departments, contacts, campus life). Be professional, warm, and concise — under 3 sentences when possible. Key info: SCO email sco@urios.edu.ph, website urios.edu.ph, Facebook facebook.com/FSUUofficial, event coverage needs 5 days lead time, unauthorized use of FSUU seal is prohibited.`;
+
+// ── Page switching (auth) ──
+function showPage(id){
+  document.querySelectorAll('.auth-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('app-layout').classList.remove('active');
+  const pg=document.getElementById(id);
+  if(pg) pg.classList.add('active');
+}
+
+// ── Panel switching (app) ──
+function showPanel(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const titles={
+    'panel-home':'Home','panel-chat':'Chat','panel-alerts':'Alerts'
+  };
+  document.getElementById('page-title').textContent=titles[id]||'UniAssist';
+  closeSidebar();
+}
+
+// ── Sidebar toggle (mobile) ──
+function toggleSidebar(){ document.body.classList.toggle('sb-open'); }
+function closeSidebar(){ document.body.classList.remove('sb-open'); }
+
+// ── Auth helpers ──
+function togglePw(inputId,eyeId){
+  const inp=document.getElementById(inputId);
+  const eye=document.getElementById(eyeId);
+  if(inp.type==='password'){inp.type='text';eye.classList.replace('ti-eye','ti-eye-off');}
+  else{inp.type='password';eye.classList.replace('ti-eye-off','ti-eye');}
+}
+function isUriosEmail(e){return e.toLowerCase().endsWith('@urios.edu.ph');}
+
+function doSignIn(){
+  const email=document.getElementById('si-email').value.trim();
+  const pass=document.getElementById('si-pass').value;
+  document.getElementById('si-email').classList.remove('err');
+  document.getElementById('si-email-err').classList.remove('show');
+  if(!email||!isUriosEmail(email)){
+    document.getElementById('si-email').classList.add('err');
+    document.getElementById('si-email-err').classList.add('show'); return;
+  }
+  if(!pass){alert('Please enter your password');return;}
+  const name=email.split('@')[0].replace(/[._]/g,' ');
+  const parts=name.split(' ');
+  currentUser={name:parts.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' '),email,initials:(parts[0][0]+(parts[1]?parts[1][0]:''))?.toUpperCase(),role:'Member'};
+  loginAndEnter();
+}
+
+function doSignUp(){
+  const first=document.getElementById('su-first').value.trim();
+  const last=document.getElementById('su-last').value.trim();
+  const email=document.getElementById('su-email').value.trim();
+  const pass=document.getElementById('su-pass').value;
+  let ok=true;
+  document.getElementById('su-email').classList.remove('err');document.getElementById('su-email-err').classList.remove('show');
+  document.getElementById('su-pass').classList.remove('err');document.getElementById('su-pass-err').classList.remove('show');
+  if(!isUriosEmail(email)){document.getElementById('su-email').classList.add('err');document.getElementById('su-email-err').classList.add('show');ok=false;}
+  if(pass.length<8){document.getElementById('su-pass').classList.add('err');document.getElementById('su-pass-err').classList.add('show');ok=false;}
+  if(!first||!last)ok=false;
+  if(!ok)return;
+  currentUser={name:first.charAt(0).toUpperCase()+first.slice(1)+' '+last.charAt(0).toUpperCase()+last.slice(1),email,initials:(first[0]+last[0]).toUpperCase(),role:document.getElementById('su-role').value||'Member'};
+  showPage('pg-verify');
+}
+
+function doForgot(){
+  const email=document.getElementById('fp-email').value.trim();
+  document.getElementById('fp-email').classList.remove('err');document.getElementById('fp-err').classList.remove('show');
+  if(!isUriosEmail(email)){document.getElementById('fp-email').classList.add('err');document.getElementById('fp-err').classList.add('show');return;}
+  showPage('pg-verify');
+}
+
+function gmailSignIn(type){
+  currentUser={name:'Urios Student',email:'student@urios.edu.ph',initials:'US',role:'Student'};
+  if(type==='signup') showPage('pg-verify');
+  else loginAndEnter();
+}
+
+function loginAsGuest(){
+  currentUser={name:'Guest',email:'',initials:'G',role:'Guest'};
+  loginAndEnter();
+}
+
+function loginAndEnter(){
+  const hr=new Date().getHours();
+  const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+  document.getElementById('h-greeting').textContent=greet;
+  document.getElementById('h-name').textContent=currentUser.name+' 👋';
+  document.getElementById('sb-avatar').textContent=currentUser.initials;
+  document.getElementById('sb-uname').textContent=currentUser.name;
+  document.getElementById('sb-urole').textContent=currentUser.role;
+  document.getElementById('top-avatar').textContent=currentUser.initials;
+  document.querySelectorAll('.auth-page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('app-layout').classList.add('active');
+  initChat('');
+}
+
+function doSignOut(){
+  currentUser={name:'',email:'',initials:'',role:''};
+  chatHistory=[];
+  showPage('pg-splash');
+}
+
+// ── Chat ──
+const welcomes={
+  '':'Good day! I\'m UniAssist, the FSUU SCO AI. Ask me anything about enrollment, programs, student policies, media inquiries, or announcements!',
+  'enrollment':'Hi! You selected Enrollment. Ask me about steps, requirements, deadlines, or how to enroll at FSUU.',
+  'entrance exam':'Hi! You selected Entrance Exam. Ask me about the schedule, requirements, test coverage, or preparation tips.',
+  'programs':'Hi! You selected FSUU Programs. Ask me about colleges, available courses, deans, or program details.',
+  'student policies':'Hi! You selected Student Policies. Ask me about the handbook, attendance rules, dress code, or university policies.',
+  'media':'Hi! You selected Media & Press. Ask me about press requests, interview scheduling, or official FSUU press releases.',
+  'announcement':'Hi! You selected Announcements. Ask me about the latest FSUU news, advisories, or where to find official updates.',
+};
+const topicSugs={
+  '':['What is the SCO?','Enrollment requirements','Available programs','Contact numbers'],
+  'enrollment':['How to enroll?','Enrollment deadlines','Required documents','Tuition fees'],
+  'entrance exam':['FSUU schedule','Exam requirements','Exam tips','Review centers'],
+  'programs':['List of courses','College of Engineering','College of Business','College of Arts'],
+  'student policies':['Attendance policy','Dress code','Student handbook','Grading system'],
+  'media':['How to request interview?','Submit press release','Media guidelines','Email the SCO'],
+  'announcement':['Latest FSUU news','View advisories','Class suspensions','Where are announcements?'],
+};
+
+function getTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+
+function addMsg(text,isUser){
+  const el=document.getElementById('msgs');
+  const w=document.createElement('div');w.className='mw '+(isUser?'u':'b');
+  if(!isUser){
+    const row=document.createElement('div');row.className='br';
+    const av=document.createElement('div');av.className='bav';av.textContent='SCO';
+    const bub=document.createElement('div');bub.className='bub';bub.textContent=text;
+    row.appendChild(av);row.appendChild(bub);w.appendChild(row);
+  } else {
+    const bub=document.createElement('div');bub.className='bub';bub.textContent=text;w.appendChild(bub);
+  }
+  const t=document.createElement('div');t.className='mt';t.textContent=getTime();w.appendChild(t);
+  el.appendChild(w);el.scrollTop=el.scrollHeight;
+}
+
+function showTyping(){
+  const el=document.getElementById('msgs');
+  const w=document.createElement('div');w.className='mw b';w.id='typ';
+  const row=document.createElement('div');row.className='br';
+  const av=document.createElement('div');av.className='bav';av.textContent='SCO';
+  const t=document.createElement('div');t.className='tyb';t.innerHTML='<span></span><span></span><span></span>';
+  row.appendChild(av);row.appendChild(t);w.appendChild(row);el.appendChild(w);el.scrollTop=el.scrollHeight;
+}
+function removeTyping(){const e=document.getElementById('typ');if(e)e.remove();}
+
+function setSuggestions(topic){
+  const el=document.getElementById('sugs');el.innerHTML='';
+  (topicSugs[topic]||topicSugs['']).forEach(s=>{
+    const btn=document.createElement('button');btn.className='sug-btn';btn.textContent=s;
+    btn.onclick=()=>{if(!busy){document.getElementById('mi').value=s;sendMsg();}};
+    el.appendChild(btn);
+  });
+}
+
+function initChat(topic){
+  document.getElementById('msgs').innerHTML='';chatHistory=[];
+  const w=welcomes[topic]||welcomes[''];
+  chatHistory.push({role:'assistant',content:w});
+  setTimeout(()=>{addMsg(w,false);setSuggestions(topic);},200);
+}
+
+function openChatTopic(topic,el){
+  showPanel('panel-chat',el);
+  initChat(topic);
+  setTimeout(()=>document.getElementById('mi').focus(),300);
+}
+
+async function sendMsg(){
+  const text=document.getElementById('mi').value.trim();
+  if(!text||busy)return;
+  busy=true;
+  document.getElementById('mi').value='';
+  document.getElementById('sugs').innerHTML='';
+  addMsg(text,true);
+  chatHistory.push({role:'user',content:text});
+  showTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:SYSTEM,messages:chatHistory.slice(-10)})
+    });
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Thank you. Please contact sco@urios.edu.ph for assistance.';
+    chatHistory.push({role:'assistant',content:reply});
+    removeTyping();addMsg(reply,false);
+  } catch(e){
+    removeTyping();addMsg('Sorry, having trouble connecting. Email sco@urios.edu.ph directly.',false);
+  }
+  busy=false;
+}
+
+document.getElementById('mi').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+});
+</script>
 </body>
-
 </html>
